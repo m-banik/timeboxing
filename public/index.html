@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pl">
   <head>
     <meta charset="utf-8" />
     <link rel="icon" href="%PUBLIC_URL%/favicon.ico" />
@@ -9,92 +9,6 @@
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     <title>Timeboxing App</title>
-    <style>
-      .App {
-        font-family: sans-serif;
-      }
-
-      .Timebox {
-        border: 1px solid gray;
-        border-radius: 5px;
-        padding: 5px;
-        margin-bottom: 10px;
-      }
-
-      .TimeboxEditor,
-      .TimeboxCreator {
-        text-align: right;
-        border: 1px solid gray;
-        border-radius: 5px;
-        padding: 20px;
-        margin-bottom: 20px;
-      }
-
-      .TimeboxCreator {
-        background-color: aqua;
-      }
-
-      .TimeboxEditor {
-        background-color: aquamarine;
-      }
-
-      .Timebox {
-        background-color: #faa;
-      }
-
-      .CurrentTimebox {
-        background-color: #ffa;
-      }
-
-      input {
-        min-width: 60%;
-        margin-left: 20px;
-        font-size: 16px;
-      }
-
-      button {
-        font-size: 16px;
-        margin-left: 10px;
-      }
-
-      .CurrentTimebox {
-        border: 1px solid gray;
-        border-radius: 5px;
-        padding: 20px;
-        text-align: center;
-      }
-
-      .Clock {
-        color: orangered;
-      }
-
-      .ProgressBar {
-        position: relative;
-        border: 1px solid orangered;
-        border-radius: 5px;
-        height: 25px;
-        margin-bottom: 20px;
-        padding: 5px;
-      }
-
-      .ProgressBar::before {
-        content: '';
-        position: absolute;
-        top: 5px;
-        left: calc(5px + var(--progress, 0));
-        width: calc(100% - var(--progress, 0) - 10px);
-        height: calc(100% - 10px);
-        background-color: orangered;
-      }
-
-      .ProgressBar.remaining::before {
-        left: 5px;
-      }
-
-      .inactive {
-        filter: blur(2px) grayscale(1);
-      }
-    </style>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
