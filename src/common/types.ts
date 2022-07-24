@@ -1,4 +1,4 @@
-import { ChangeEventHandler } from 'react';
+import { ChangeEventHandler, MouseEventHandler } from 'react';
 import { nanoid } from 'nanoid';
 
 export type IdType = ReturnType<typeof nanoid>;
@@ -16,3 +16,5 @@ export type TimeboxHandlerType = (timebox: TimeboxType) => void;
 export type EditableTimeboxHandlerType = (timebox: EditableTimeboxType) => void;
 
 export type InputChangeEventHandlerType = ChangeEventHandler<HTMLInputElement>;
+
+export type ButtonEventHandlerType = MouseEventHandler<HTMLButtonElement>;
