@@ -4,7 +4,7 @@ import {
   EditableTimeboxHandlerType,
   InputChangeEventHandlerType,
 } from '@Common/index';
-import './styles.css';
+import './styles.scss';
 
 type TimeboxPropsType = {
   title: TimeboxType['title'];

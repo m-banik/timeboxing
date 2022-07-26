@@ -1,6 +1,6 @@
 import React from 'react';
 import { normalizePositiveNumberByLimit } from '../../utils';
-import './styles.css';
+import './styles.scss';
 
 type ClockPropsType = {
   className?: string;

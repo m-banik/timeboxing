@@ -1,0 +1,10 @@
+@import '../../styles/variables.scss';
+
+.TimeboxEditor {
+  text-align: right;
+  border: $default-border;
+  border-radius: $border-radius;
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: darken(aquamarine, 5);
+}

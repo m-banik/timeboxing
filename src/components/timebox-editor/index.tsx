@@ -1,6 +1,6 @@
 import React from 'react';
 import { TimeboxType, InputChangeEventHandlerType } from '@Common/types';
-import './styles.css';
+import './styles.scss';
 
 type TimeboxEditorPropsType = {
   title: TimeboxType['title'];

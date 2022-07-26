@@ -1,3 +1,7 @@
+html {
+  font-size: 14px;
+}
+
 input {
   min-width: 60%;
   margin-left: 20px;
@@ -7,12 +11,4 @@ input {
 button {
   font-size: 16px;
   margin-left: 10px;
-}
-
-.App {
-  font-family: sans-serif;
-}
-
-.inactive {
-  filter: blur(2px) grayscale(1);
 }

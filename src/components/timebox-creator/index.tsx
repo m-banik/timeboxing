@@ -1,7 +1,7 @@
 import React from 'react';
 import { TimeboxHandlerType } from '../../common';
 import { nanoid } from '../../utils';
-import './styles.css';
+import './styles.scss';
 
 type TimeboxCreatorPropsType = {
   onCreate: TimeboxHandlerType;

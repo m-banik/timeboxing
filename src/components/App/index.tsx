@@ -1,6 +1,6 @@
 import React from 'react';
 import { TimeboxList, EditableTimebox } from '..';
-import './styles.css';
+import './styles.scss';
 
 export function App() {
   return (
