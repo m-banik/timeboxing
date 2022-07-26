@@ -1,0 +1,39 @@
+@import '../../styles/variables.scss';
+
+.ProgressBar {
+  position: relative;
+  border: $default-border;
+  border-color: orangered;
+  border-radius: $border-radius;
+  height: 25px;
+  margin-bottom: 20px;
+  padding: 5px;
+  transition: border-color 0.3s;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: calc(5px + var(--progress, 0));
+    width: calc(100% - 10px - var(--progress, 0));
+    max-width: calc(100% - 10px);
+    height: calc(100% - 10px);
+    border-radius: $border-radius;
+    background-color: orangered;
+    transition: background-color 0.3s;
+  }
+
+  &.tracking {
+    &::before {
+      left: 5px;
+      width: var(--progress, 0);
+    }
+  }
+
+  &.completed {
+    border-color: darken(mediumaquamarine, 12);
+    &::before {
+      background-color: darken(mediumaquamarine, 12);
+    }
+  }
+}

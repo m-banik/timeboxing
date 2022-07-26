@@ -1,7 +1,7 @@
 import React from 'react';
 import { Clock, ProgressBar } from '..';
 import { TimeboxType, ButtonEventHandlerType } from '../../common';
-import './styles.css';
+import './styles.scss';
 
 type CurrentTimeboxPropsType = {
   title: TimeboxType['title'];
@@ -71,23 +71,21 @@ export class CurrentTimebox extends React.Component<
   };
 
   handlePause: ButtonEventHandlerType = (event) => {
-    let isPaused = this.state.isPaused;
-
-    this.setState(function (prevState) {
-      isPaused = !prevState.isPaused;
+    this.setState((prevState) => {
+      const isPaused = !prevState.isPaused;
       const pausesCount = prevState.pausesCount;
+
+      if (isPaused) {
+        this.stopTimer();
+      } else {
+        this.startTimer();
+      }
 
       return {
         isPaused,
         pausesCount: isPaused ? pausesCount + 1 : pausesCount,
       };
     });
-
-    if (isPaused) {
-      this.stopTimer();
-    } else {
-      this.startTimer();
-    }
   };
 
   render() {
@@ -100,6 +98,10 @@ export class CurrentTimebox extends React.Component<
     const secondsLeft = Math.floor(timeLeftInSeconds % 60);
     const progressInPercent =
       (elapsedTimeInSeconds / totalTimeInSeconds) * 100.0;
+
+    if (elapsedTimeInSeconds >= totalTimeInSeconds) {
+      this.stopTimer();
+    }
 
     return (
       <div className={`CurrentTimebox ${!isEditable ? 'inactive' : ''}`}>
