@@ -41,8 +41,14 @@ export const Clock: React.FC<ClockPropsType> = ({
   }
 
   return (
-    <h1 key={10} className={`Clock ${className}`}>
-      {parsedHours}:{parsedMinutes}:{parsedSeconds}:{parsedMiliseconds}
+    <h1 className={`clock ${className}`}>
+      <span className="clock__hours">{parsedHours}</span>
+      <span className="clock__separator--red">:</span>
+      <span className="clock__minutes--orangered">{parsedMinutes}</span>
+      <span className="clock__separator--green">:</span>
+      <span className="clock__seconds--orangered">{parsedSeconds}</span>
+      <span className="clock__separator--blue">:</span>
+      <span className="clock__miliseconds">{parsedMiliseconds}</span>
     </h1>
   );
 };

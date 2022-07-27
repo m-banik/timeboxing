@@ -106,11 +106,7 @@ export class CurrentTimebox extends React.Component<
     return (
       <div className={`CurrentTimebox ${!isEditable ? 'inactive' : ''}`}>
         <h1>{title}</h1>
-        <Clock
-          className={isPaused ? 'inactive' : ''}
-          minutes={minutesLeft}
-          seconds={secondsLeft}
-        />
+        <Clock minutes={minutesLeft} seconds={secondsLeft} />
         <ProgressBar
           className={isPaused ? 'inactive' : ''}
           percent={progressInPercent}

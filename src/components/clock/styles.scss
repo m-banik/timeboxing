@@ -1,3 +1,25 @@
-.Clock {
-  color: orangered;
+.clock {
+  color: #000;
+
+  &__hours,
+  &__minutes,
+  &__seconds,
+  &__miliseconds,
+  &__separator {
+    &--red {
+      color: red;
+    }
+
+    &--green {
+      color: green;
+    }
+
+    &--blue {
+      color: blue;
+    }
+
+    &--orangered {
+      color: orangered;
+    }
+  }
 }
