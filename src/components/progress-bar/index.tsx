@@ -1,4 +1,5 @@
 import React from 'react';
+import CN from 'classnames';
 import { assertObjectIsOfCssVariablesPropertiesType } from '../../utils';
 import './styles.scss';
 
@@ -13,12 +14,11 @@ export const ProgressBar: React.FC<ProgressBarPropsType> = ({
   className = '',
   trackRemaining = false,
 }) => {
-  const classes = [
-    'ProgressBar',
-    trackRemaining ? 'tracking' : '',
-    percent >= 100 ? 'completed' : '',
+  const classes = CN('ProgressBar', {
+    tracking: trackRemaining,
+    completed: percent >= 100,
     className,
-  ].join(' ');
+  });
 
   const cssVariable = { '--progress': `${percent}%` };
   assertObjectIsOfCssVariablesPropertiesType(cssVariable);

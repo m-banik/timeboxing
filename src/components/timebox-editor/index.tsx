@@ -1,4 +1,5 @@
 import React from 'react';
+import CN from 'classnames';
 import { TimeboxType, InputChangeEventHandlerType } from '@Common/types';
 import './styles.scss';
 
@@ -19,8 +20,9 @@ export const TimeboxEditor: React.FC<TimeboxEditorPropsType> = ({
   onTotalTimeInMinutesChange,
   onConfirm,
 }) => {
+  const classNames = CN('TimeboxEditor', { inactive: !isEditable });
   return (
-    <div className={`TimeboxEditor ${!isEditable ? 'inactive' : ''}`}>
+    <div className={classNames}>
       <label>
         Co robisz?
         <input
