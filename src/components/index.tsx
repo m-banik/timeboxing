@@ -3,6 +3,7 @@ export * from './clock';
 export * from './current-timebox';
 export * from './editable-timebox';
 export * from './progress-bar';
+export * from './real-time-clock';
 export * from './timebox';
 export * from './timebox-creator';
 export * from './timebox-editor';
