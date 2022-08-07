@@ -89,6 +89,10 @@ export class CurrentTimebox extends React.Component<
     });
   };
 
+  componentWillUnmount() {
+    this.intervalId && this.stopTimer();
+  }
+
   render() {
     const { isRunning, isPaused, pausesCount, elapsedTimeInSeconds } =
       this.state;
