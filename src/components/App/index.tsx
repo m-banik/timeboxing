@@ -1,12 +1,14 @@
 import React from 'react';
-import { TimeboxList, EditableTimebox } from '..';
+import { ErrorBoundary, TimeboxList, EditableTimebox } from '..';
 import './styles.scss';
 
 export function App() {
   return (
     <div className="App">
-      <TimeboxList />
-      <EditableTimebox />
+      <ErrorBoundary message={'Something went wrong...'}>
+        <TimeboxList />
+        <EditableTimebox />
+      </ErrorBoundary>
     </div>
   );
 }
