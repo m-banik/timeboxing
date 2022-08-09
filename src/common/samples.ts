@@ -1,5 +1,5 @@
 import { TimeboxType } from '.';
-import { nanoid } from '../utils';
+import { nanoid } from '../utilities';
 
 export const timeboxesSamples: TimeboxType[] = [
   {

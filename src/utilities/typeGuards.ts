@@ -13,10 +13,8 @@ export function assertObjectIsOfCssVariablesPropertiesType(
       (key) => typeof key === 'string' && key.slice(0, 2) === '--'
     );
 
-    if (areVariablesOfRightFormat) {
-      return;
+    if (!areVariablesOfRightFormat) {
+      throw new Error(errorMessage);
     }
   }
-
-  throw new Error(errorMessage);
 }

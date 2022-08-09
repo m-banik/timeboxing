@@ -19,8 +19,8 @@
     "paths": {
       "@Common/*": ["./common/*"],
       "@Components/*": ["./components/*"],
-      "@Utils/*": ["./utils/*"]
+      "@Utils/*": ["./utilities/*"]
     }
   },
-  "include": ["src"]
+  "include": ["src", "index.tsx"]
 }

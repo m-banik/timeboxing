@@ -1,6 +1,6 @@
 import React from 'react';
 import CN from 'classnames';
-import { assertObjectIsOfCssVariablesPropertiesType } from '../../utils';
+import { assertObjectIsOfCssVariablesPropertiesType } from '../../utilities';
 import './styles.scss';
 
 type ProgressBarPropsType = {

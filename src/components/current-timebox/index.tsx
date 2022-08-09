@@ -2,6 +2,7 @@ import React from 'react';
 import CN from 'classnames';
 import { Clock, ProgressBar } from '..';
 import { TimeboxType, ButtonEventHandlerType } from '../../common';
+import { getMinutesAndSecondsFromDurationInSeconds } from '../../utilities';
 import './styles.scss';
 
 type CurrentTimeboxPropsType = {
@@ -100,8 +101,8 @@ export class CurrentTimebox extends React.Component<
     const classNames = CN('CurrentTimebox', { inactive: !isEditable });
     const totalTimeInSeconds = totalTimeInMinutes * 60;
     const timeLeftInSeconds = totalTimeInSeconds - elapsedTimeInSeconds;
-    const minutesLeft = Math.floor(timeLeftInSeconds / 60);
-    const secondsLeft = Math.floor(timeLeftInSeconds % 60);
+    const [minutesLeft, secondsLeft] =
+      getMinutesAndSecondsFromDurationInSeconds(timeLeftInSeconds);
     const progressInPercent =
       (elapsedTimeInSeconds / totalTimeInSeconds) * 100.0;
 
