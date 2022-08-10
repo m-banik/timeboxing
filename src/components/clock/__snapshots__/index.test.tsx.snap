@@ -1,0 +1,41 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Clock component renders properly(TestRenderer) with correct numeric props 1`] = `
+Array [
+  <span
+    className="clock__hours"
+  >
+    12
+  </span>,
+  <span
+    className="clock__separator--red"
+  >
+    :
+  </span>,
+  <span
+    className="clock__minutes--orangered"
+  >
+    30
+  </span>,
+  <span
+    className="clock__separator--green"
+  >
+    :
+  </span>,
+  <span
+    className="clock__seconds--orangered"
+  >
+    45
+  </span>,
+  <span
+    className="clock__separator--blue"
+  >
+    :
+  </span>,
+  <span
+    className="clock__miliseconds"
+  >
+    500
+  </span>,
+]
+`;
