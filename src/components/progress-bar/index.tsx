@@ -17,10 +17,15 @@ export const ProgressBar: React.FC<ProgressBarPropsType> = ({
   const classes = CN('ProgressBar', {
     tracking: trackRemaining,
     completed: percent >= 100,
-    className,
+    [className]: !!className,
   });
 
-  const cssVariable = { '--progress': `${percent}%` };
+  let percentCSSValue = percent > 100 ? 100 : percent;
+  if (percentCSSValue < 0) {
+    percentCSSValue = 0;
+  }
+
+  const cssVariable = { '--progress': `${percentCSSValue}%` };
   assertObjectIsOfCssVariablesPropertiesType(cssVariable);
 
   return <div className={classes} style={cssVariable}></div>;
