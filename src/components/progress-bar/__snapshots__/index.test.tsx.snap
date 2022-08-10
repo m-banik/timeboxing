@@ -1,0 +1,12 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ProgressBar component renders properly with the provided props(TestRenderer) as correct element 1`] = `
+<div
+  className="ProgressBar tracking completed xyz"
+  style={
+    Object {
+      "--progress": "100%",
+    }
+  }
+/>
+`;
