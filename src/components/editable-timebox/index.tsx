@@ -30,23 +30,22 @@ export class EditableTimebox extends React.Component<
   render() {
     const { title, totalTimeInMinutes, isConfirmed } = this.state;
 
-    return (
-      <>
-        <TimeboxEditor
-          title={title}
-          totalTimeInMinutes={totalTimeInMinutes}
-          isEditable={!isConfirmed}
-          onTitleChange={this.handleTitleChange}
-          onTotalTimeInMinutesChange={this.handleTotalTimeInMinutesChange}
-          onConfirm={this.handleConfirmation}
-        />
-        <CurrentTimebox
-          title={title}
-          totalTimeInMinutes={totalTimeInMinutes}
-          isEditable={isConfirmed}
-          onEdit={this.handleConfirmation}
-        />
-      </>
+    return isConfirmed ? (
+      <CurrentTimebox
+        title={title}
+        totalTimeInMinutes={totalTimeInMinutes}
+        isEditable={isConfirmed}
+        onEdit={this.handleConfirmation}
+      />
+    ) : (
+      <TimeboxEditor
+        title={title}
+        totalTimeInMinutes={totalTimeInMinutes}
+        isEditable={!isConfirmed}
+        onTitleChange={this.handleTitleChange}
+        onTotalTimeInMinutesChange={this.handleTotalTimeInMinutesChange}
+        onConfirm={this.handleConfirmation}
+      />
     );
   }
 }
