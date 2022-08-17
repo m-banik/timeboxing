@@ -24,11 +24,9 @@ describe('sleep', () => {
       async (timeout, testTimeout) => {
         sleep(timeout, testSamples.onSuccess, testSamples.onError);
 
-        await new Promise<typeof testSamples>((resolve) =>
+        await new Promise<TestSamplesType>((resolve) =>
           setTimeout(() => resolve(testSamples), testTimeout)
-        ).then((testSamples) =>
-          expect(testSamples.onSuccess).toBeCalledTimes(1)
-        );
+        ).then(() => expect(testSamples.onSuccess).toBeCalledTimes(1));
       }
     );
   });
@@ -42,9 +40,9 @@ describe('sleep', () => {
       async (timeout, testTimeout) => {
         sleep(timeout, testSamples.onSuccess, testSamples.onError);
 
-        await new Promise<typeof testSamples>((resolve) =>
+        await new Promise<TestSamplesType>((resolve) =>
           setTimeout(() => resolve(testSamples), testTimeout)
-        ).then((testSamples) => expect(testSamples.onError).toBeCalledTimes(1));
+        ).then(() => expect(testSamples.onError).toBeCalledTimes(1));
       }
     );
   });
