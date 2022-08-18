@@ -15,7 +15,7 @@ export const delayedError = (ms: number, message = 'Error handled') =>
     setTimeout(() => {
       reject(message);
     }, ms)
-  ).catch(console.log);
+  );
 
 // Stwórz funkcję isEven(num), zwracającą obietnicę, która ma natychmiast być
 // dotrzymana jeśli przekazana została liczba. Wartością ma być true jeśli liczba
@@ -30,7 +30,7 @@ export const isEven = (num: number) =>
     const isEven = (num & 1) === 0;
 
     resolve(isEven);
-  }).catch(console.log);
+  });
 
 // Stwórz funkcję slowIsEven(num, ms=1000), która robi to samo co funkcja isEven ale po
 // zadanym czasie w milisekundach. Wykorzystaj do implementacji funkcję isEven oraz wait.
@@ -50,6 +50,4 @@ export const slowIsEven = (num: number, ms = 1000) =>
 // timeout(slowIsEven(5, 4000), 2000) // ma odrzucić obietnicę po dwóch sekundach
 
 export const timeout = (promise: Promise<unknown>, ms = 3000) =>
-  Promise.race([promise, delayedError(ms, 'The promise took too long!')])
-    .then((result) => result)
-    .catch(console.log);
+  Promise.race([promise, delayedError(ms, 'The promise took too long!')]);
