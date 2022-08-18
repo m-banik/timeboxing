@@ -3,6 +3,7 @@ export * from './fizzBuzz';
 export * from './getMinutesAndSecondsFromDurationInSeconds';
 export * from './nanoid';
 export * from './normalizePositiveNumberByLimit';
+export * from './promises';
 export * from './sleep';
 export * from './typeGuards';
 export * from './xxx';
