@@ -1,5 +1,6 @@
 export * from './fib';
 export * from './fizzBuzz';
+export * from './getLettersWithNumbers';
 export * from './getMinutesAndSecondsFromDurationInSeconds';
 export * from './nanoid';
 export * from './normalizePositiveNumberByLimit';
