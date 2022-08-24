@@ -1,19 +1,19 @@
 import React from 'react';
 import {
   TimeboxType,
-  EditableTimeboxHandlerType,
+  TimeboxHandlerType,
+  TimeboxDataType,
   InputChangeEventHandlerType,
 } from '@Common/index';
 import './styles.scss';
 
 type TimeboxPropsType = {
-  title: TimeboxType['title'];
-  totalTimeInMinutes: TimeboxType['totalTimeInMinutes'];
-  onEdit: EditableTimeboxHandlerType;
+  timebox: TimeboxType;
+  onEdit: TimeboxHandlerType;
   onDelete: VoidFunction;
 };
 
-type TimeboxStateType = Omit<TimeboxType, 'id'>;
+type TimeboxStateType = TimeboxDataType;
 
 export class Timebox extends React.Component<
   TimeboxPropsType,
@@ -21,38 +21,41 @@ export class Timebox extends React.Component<
 > {
   constructor(props: TimeboxPropsType) {
     super(props);
+
+    const { timebox } = this.props;
+
     this.state = {
-      title: props.title,
-      totalTimeInMinutes: props.totalTimeInMinutes,
+      title: timebox.title,
+      totalTimeInMinutes: timebox.totalTimeInMinutes,
     };
   }
 
   handleTitleChange: InputChangeEventHandlerType = (event) => {
     const title = event.target.value;
-    this.setState({
+    this.setState((prevState) => ({
+      ...prevState,
       title,
-    });
+    }));
   };
 
   handleTotalTimeInMinutesChange: InputChangeEventHandlerType = (event) => {
     const totalTimeInMinutes = Number(event.target.value);
-    this.setState({
-      totalTimeInMinutes,
-    });
+    this.setState((prevState) => ({ ...prevState, totalTimeInMinutes }));
   };
 
   handleEdit = () => {
-    const editedTimebox = { ...this.state };
+    const { timebox } = this.props;
+    const editedTimebox = { ...this.state, id: timebox.id };
     this.props.onEdit(editedTimebox);
   };
 
   render() {
     const { title, totalTimeInMinutes } = this.state;
-    const { onDelete } = this.props;
+    const { timebox, onDelete } = this.props;
 
     const isEditable =
-      title !== this.props.title ||
-      totalTimeInMinutes !== this.props.totalTimeInMinutes;
+      title !== timebox.title ||
+      totalTimeInMinutes !== timebox.totalTimeInMinutes;
 
     return (
       <div className={'Timebox'}>

@@ -1,10 +1,9 @@
 import React from 'react';
-import { TimeboxHandlerType } from '../../common';
-import { nanoid } from '../../utilities';
+import { TimeboxDataHandlerType } from '../../common';
 import './styles.scss';
 
 type TimeboxCreatorPropsType = {
-  onCreate: TimeboxHandlerType;
+  onCreate: TimeboxDataHandlerType;
 };
 
 export class TimeboxCreator extends React.Component<TimeboxCreatorPropsType> {
@@ -27,7 +26,6 @@ export class TimeboxCreator extends React.Component<TimeboxCreatorPropsType> {
 
     if (title !== undefined && !isNaN(totalTimeInMinutes)) {
       this.props.onCreate({
-        id: nanoid(),
         title,
         totalTimeInMinutes,
       });

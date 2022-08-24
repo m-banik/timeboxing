@@ -9,11 +9,11 @@ export type TimeboxType = {
   totalTimeInMinutes: number;
 };
 
-export type EditableTimeboxType = Omit<TimeboxType, 'id'>;
-
 export type TimeboxHandlerType = (timebox: TimeboxType) => void;
 
-export type EditableTimeboxHandlerType = (timebox: EditableTimeboxType) => void;
+export type TimeboxDataType = Omit<TimeboxType, 'id'>;
+
+export type TimeboxDataHandlerType = (timebox: TimeboxDataType) => void;
 
 export type InputChangeEventHandlerType = ChangeEventHandler<HTMLInputElement>;
 

@@ -1,8 +1,8 @@
 import React from 'react';
 import { TimeboxEditor, CurrentTimebox } from '..';
-import { EditableTimeboxType, InputChangeEventHandlerType } from '../../common';
+import { TimeboxDataType, InputChangeEventHandlerType } from '../../common';
 
-type EditableTimeboxStateType = EditableTimeboxType & { isConfirmed: boolean };
+type EditableTimeboxStateType = TimeboxDataType & { isConfirmed: boolean };
 
 export class EditableTimebox extends React.Component<
   {},
