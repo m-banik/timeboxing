@@ -37,6 +37,28 @@ export const FakeTimeboxesApi = {
 
     return editedTimebox;
   },
+  partiallyUpdateTimebox: async (timeboxToUpdate: Partial<TimeboxType>) => {
+    await wait(1000);
+
+    if (!timeboxToUpdate.id) {
+      throw new Error('The provided timebox object has no ID key included!');
+    }
+
+    const editedTimeboxIndex = getTimeboxIndexById(timeboxToUpdate.id);
+
+    if (editedTimeboxIndex < 0) {
+      throw new Error('There is no timebox of such ID!');
+    }
+
+    const updatedTimebox = {
+      ...timeboxes[editedTimeboxIndex],
+      ...timeboxToUpdate,
+    };
+
+    timeboxes[editedTimeboxIndex] = { ...updatedTimebox };
+
+    return updatedTimebox;
+  },
   removeTimebox: async (removedTimeboxId: IdType) => {
     await wait(1000);
 

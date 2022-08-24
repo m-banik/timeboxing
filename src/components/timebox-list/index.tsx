@@ -36,7 +36,7 @@ export class TimeboxList extends React.Component<{}, TimeboxListStateType> {
   };
 
   updateTimebox = (updatedTimebox: TimeboxType) => {
-    FakeTimeboxesApi.editTimebox(updatedTimebox)
+    FakeTimeboxesApi.partiallyUpdateTimebox(updatedTimebox)
       .then((newTimeBox) => {
         this.setState((prevState) => {
           const timeboxes = prevState.timeboxes.map((timebox) =>
