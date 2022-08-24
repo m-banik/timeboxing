@@ -1,7 +1,9 @@
 import React from 'react';
 import { TimeboxCreator, LoadingSpinner, ErrorMessage, Timebox } from '..';
-import { FakeTimeboxesApi } from '../../api';
+import { createTimeboxesAPI } from '../../api';
 import { TimeboxType, TimeboxDataHandlerType, IdType } from '../../common';
+
+const FakeTimeboxesApi = createTimeboxesAPI({ delayInMiliseconds: 4000 });
 
 type TimeboxListStateType = {
   isLoading: boolean;
