@@ -1,28 +1,19 @@
 import {
+  TimeboxesApiType,
   timeboxesSamples,
   IdType,
   TimeboxDataType,
   TimeboxType,
 } from '../common';
-import { wait, nanoid } from '../utilities';
+import { wait } from '../utilities';
 
 type CreateFakeTimeboxesAPIConfigType = {
   delayInMiliseconds?: number;
 };
 
-type FakeTimeboxesApiType = {
-  getTimeboxes: () => Promise<TimeboxType[]>;
-  addTimebox: (addedTimeboxData: TimeboxDataType) => Promise<TimeboxType>;
-  editTimebox: (editedTimebox: TimeboxType) => Promise<TimeboxType>;
-  partiallyUpdateTimebox: (
-    timeboxToUpdate: Partial<TimeboxType>
-  ) => Promise<TimeboxType>;
-  removeTimebox: (removedTimeboxId: IdType) => Promise<TimeboxType>;
-};
-
 type CreateFakeTimeboxesAPIType = (
   config: CreateFakeTimeboxesAPIConfigType
-) => FakeTimeboxesApiType;
+) => TimeboxesApiType;
 
 export const createFakeTimeboxesAPI: CreateFakeTimeboxesAPIType = ({
   delayInMiliseconds,
@@ -32,19 +23,37 @@ export const createFakeTimeboxesAPI: CreateFakeTimeboxesAPIType = ({
   const getTimeboxIndexById = (searchedId: IdType) =>
     timeboxes.findIndex(({ id }) => searchedId === id);
 
-  const FakeTimeboxesApi: FakeTimeboxesApiType = {
+  const FakeTimeboxesApi: TimeboxesApiType = {
+    getTimebox: async (timeboxId) => {
+      await wait(delayInMiliseconds || 1000);
+
+      const searchedTimeboxIndex = getTimeboxIndexById(timeboxId);
+
+      if (searchedTimeboxIndex < 0) {
+        throw new Error('There is no timebox of such ID!');
+      }
+
+      return timeboxes[searchedTimeboxIndex];
+    },
+
     getTimeboxes: async () => {
       await wait(delayInMiliseconds || 1000);
       return [...timeboxes];
     },
+
     addTimebox: async (addedTimeboxData: TimeboxDataType) => {
       await wait(delayInMiliseconds || 1000);
 
-      const addedTimebox = { ...addedTimeboxData, id: nanoid() };
+      const customId = Math.floor(
+        Math.random() * 1000000000000 + timeboxes.length
+      );
+
+      const addedTimebox = { ...addedTimeboxData, id: customId };
       timeboxes.push({ ...addedTimebox });
 
       return addedTimebox;
     },
+
     editTimebox: async (editedTimebox: TimeboxType) => {
       await wait(delayInMiliseconds || 1000);
 
@@ -58,6 +67,7 @@ export const createFakeTimeboxesAPI: CreateFakeTimeboxesAPIType = ({
 
       return editedTimebox;
     },
+
     partiallyUpdateTimebox: async (timeboxToUpdate: Partial<TimeboxType>) => {
       await wait(delayInMiliseconds || 1000);
 
@@ -80,6 +90,7 @@ export const createFakeTimeboxesAPI: CreateFakeTimeboxesAPIType = ({
 
       return updatedTimebox;
     },
+
     removeTimebox: async (removedTimeboxId: IdType) => {
       await wait(delayInMiliseconds || 1000);
 

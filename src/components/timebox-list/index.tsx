@@ -1,9 +1,12 @@
 import React from 'react';
 import { TimeboxCreator, LoadingSpinner, ErrorMessage, Timebox } from '..';
-import { createFakeTimeboxesAPI } from '../../api';
+// ToDo: Changed due to the different data source
+import { createTimeboxesAPI } from '../../api';
+// import { createFakeTimeboxesAPI } from '../../api';
 import { TimeboxType, TimeboxDataHandlerType, IdType } from '../../common';
 
-const FakeTimeboxesApi = createFakeTimeboxesAPI({ delayInMiliseconds: 4000 });
+const timeboxesApi = createTimeboxesAPI();
+// const timeboxesApi = createFakeTimeboxesAPI({ delayInMiliseconds: 4000 });
 
 type TimeboxListStateType = {
   isLoading: boolean;
@@ -19,7 +22,8 @@ export class TimeboxList extends React.Component<{}, TimeboxListStateType> {
   };
 
   componentDidMount() {
-    FakeTimeboxesApi.getTimeboxes()
+    timeboxesApi
+      .getTimeboxes()
       .then((timeboxes) => {
         this.setState((prevState) => ({ ...prevState, timeboxes }));
       })
@@ -29,7 +33,7 @@ export class TimeboxList extends React.Component<{}, TimeboxListStateType> {
   }
 
   addTimebox: TimeboxDataHandlerType = (addedTimebox) => {
-    FakeTimeboxesApi.addTimebox(addedTimebox).then((newTimebox) => {
+    timeboxesApi.addTimebox(addedTimebox).then((newTimebox) => {
       this.setState((prevState) => ({
         ...prevState,
         timeboxes: [...prevState.timeboxes, newTimebox],
@@ -38,7 +42,8 @@ export class TimeboxList extends React.Component<{}, TimeboxListStateType> {
   };
 
   updateTimebox = (updatedTimebox: TimeboxType) => {
-    FakeTimeboxesApi.partiallyUpdateTimebox(updatedTimebox)
+    timeboxesApi
+      .partiallyUpdateTimebox(updatedTimebox)
       .then((newTimeBox) => {
         this.setState((prevState) => {
           const timeboxes = prevState.timeboxes.map((timebox) =>
@@ -53,12 +58,13 @@ export class TimeboxList extends React.Component<{}, TimeboxListStateType> {
   };
 
   removeTimebox = (removedTimeboxId: IdType) => {
-    FakeTimeboxesApi.removeTimebox(removedTimeboxId)
-      .then((removedTimebox) => {
+    timeboxesApi
+      .removeTimebox(removedTimeboxId)
+      .then(() => {
         this.setState((prevState) => ({
           ...prevState,
           timeboxes: prevState.timeboxes.filter(
-            (timebox) => timebox.id !== removedTimebox.id
+            (timebox) => timebox.id !== removedTimeboxId
           ),
         }));
       })
