@@ -6,7 +6,7 @@ import {
 } from '../common';
 import { wait, nanoid } from '../utilities';
 
-type CreateTimeboxesAPIConfigType = {
+type CreateFakeTimeboxesAPIConfigType = {
   delayInMiliseconds?: number;
 };
 
@@ -20,11 +20,11 @@ type FakeTimeboxesApiType = {
   removeTimebox: (removedTimeboxId: IdType) => Promise<TimeboxType>;
 };
 
-type CreateTimeboxesAPIType = (
-  config: CreateTimeboxesAPIConfigType
+type CreateFakeTimeboxesAPIType = (
+  config: CreateFakeTimeboxesAPIConfigType
 ) => FakeTimeboxesApiType;
 
-export const createTimeboxesAPI: CreateTimeboxesAPIType = ({
+export const createFakeTimeboxesAPI: CreateFakeTimeboxesAPIType = ({
   delayInMiliseconds,
 }) => {
   const timeboxes = [...timeboxesSamples];
