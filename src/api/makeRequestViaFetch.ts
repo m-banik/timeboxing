@@ -29,22 +29,24 @@ type DeleteRequestViaFetchParamsType = {
   data: IdType;
 };
 
-type RequestViaFetchParamsType =
+type RequestViaFetchParamsType = { baseUrl?: string } & (
   | GetRequestViaFetchParamsType
   | PostRequestViaFetchParamsType
   | PutRequestViaFetchParamsType
   | PatchRequestViaFetchParamsType
-  | DeleteRequestViaFetchParamsType;
+  | DeleteRequestViaFetchParamsType
+);
 
 type MakeRequestViaFetchType = (
   params: RequestViaFetchParamsType
 ) => Promise<unknown>;
 
 export const makeRequestViaFetch: MakeRequestViaFetchType = async ({
+  baseUrl,
   method,
   data,
 }) => {
-  let url = BASE_URL;
+  let url = baseUrl || BASE_URL;
   let requestBody:
     | TimeboxType
     | TimeboxDataType

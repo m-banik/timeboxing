@@ -2,22 +2,32 @@ import { makeRequestViaFetch } from './';
 import { TimeboxesApiType } from '../common';
 import { asssertIsOfTimeboxType, asssertAreOfTimeboxType } from '../utilities';
 
-type CreateTimeboxesAPIType = () => TimeboxesApiType;
+type CreateTimeboxesAPIConfigType = {
+  baseUrl?: string;
+};
 
-export const createTimeboxesAPI: CreateTimeboxesAPIType = () => {
+type CreateTimeboxesAPIType = (
+  config?: CreateTimeboxesAPIConfigType
+) => TimeboxesApiType;
+
+export const createTimeboxesAPI: CreateTimeboxesAPIType = (config) => {
+  const baseUrl = config?.baseUrl;
+
   const TimeboxesApi: TimeboxesApiType = {
     getTimebox: async (timeboxId) =>
-      makeRequestViaFetch({ method: 'GET', data: timeboxId }).then((result) => {
-        asssertIsOfTimeboxType(
-          result,
-          'Server provided data of an incorrect format!'
-        );
+      makeRequestViaFetch({ baseUrl, method: 'GET', data: timeboxId }).then(
+        (result) => {
+          asssertIsOfTimeboxType(
+            result,
+            'Server provided data of an incorrect format!'
+          );
 
-        return result;
-      }),
+          return result;
+        }
+      ),
 
     getTimeboxes: async () =>
-      makeRequestViaFetch({ method: 'GET' }).then((result) => {
+      makeRequestViaFetch({ baseUrl, method: 'GET' }).then((result) => {
         asssertAreOfTimeboxType(
           result,
           'Server provided data of an incorrect format!'
@@ -28,6 +38,7 @@ export const createTimeboxesAPI: CreateTimeboxesAPIType = () => {
 
     addTimebox: async (addedTimeboxData) =>
       makeRequestViaFetch({
+        baseUrl,
         method: 'POST',
         data: addedTimeboxData,
       }).then((result) => {
@@ -40,19 +51,19 @@ export const createTimeboxesAPI: CreateTimeboxesAPIType = () => {
       }),
 
     editTimebox: async (editedTimebox) =>
-      makeRequestViaFetch({
-        method: 'PUT',
-        data: editedTimebox,
-      }).then((result) => {
-        asssertIsOfTimeboxType(
-          result,
-          'Server provided data of an incorrect format!'
-        );
-        return result;
-      }),
+      makeRequestViaFetch({ baseUrl, method: 'PUT', data: editedTimebox }).then(
+        (result) => {
+          asssertIsOfTimeboxType(
+            result,
+            'Server provided data of an incorrect format!'
+          );
+          return result;
+        }
+      ),
 
     partiallyUpdateTimebox: async (partiallyUpdatedTimebox) =>
       makeRequestViaFetch({
+        baseUrl,
         method: 'PATCH',
         data: partiallyUpdatedTimebox,
       }).then((result) => {
@@ -65,6 +76,7 @@ export const createTimeboxesAPI: CreateTimeboxesAPIType = () => {
 
     removeTimebox: async (removedTimeboxId) =>
       makeRequestViaFetch({
+        baseUrl,
         method: 'DELETE',
         data: removedTimeboxId,
       }),

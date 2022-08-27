@@ -29,6 +29,13 @@ export class TimeboxList extends React.Component<{}, TimeboxListStateType> {
       })
       .then(() => {
         this.setState((prevState) => ({ ...prevState, isLoading: false }));
+      })
+      .catch(() => {
+        this.setState((prevState) => ({
+          ...prevState,
+          isLoading: false,
+          hasError: true,
+        }));
       });
   }
 
