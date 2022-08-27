@@ -53,7 +53,7 @@ export const createTimeboxesAPI: CreateTimeboxesAPIType = () => {
 
     partiallyUpdateTimebox: async (partiallyUpdatedTimebox) =>
       makeRequestViaFetch({
-        method: 'PUT',
+        method: 'PATCH',
         data: partiallyUpdatedTimebox,
       }).then((result) => {
         asssertIsOfTimeboxType(

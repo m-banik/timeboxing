@@ -1,10 +1,4 @@
-import {
-  TimeboxesApiType,
-  timeboxesSamples,
-  IdType,
-  TimeboxDataType,
-  TimeboxType,
-} from '../common';
+import { TimeboxesApiType, timeboxesSamples, IdType } from '../common';
 import { wait } from '../utilities';
 
 type CreateFakeTimeboxesAPIConfigType = {
@@ -41,7 +35,7 @@ export const createFakeTimeboxesAPI: CreateFakeTimeboxesAPIType = ({
       return [...timeboxes];
     },
 
-    addTimebox: async (addedTimeboxData: TimeboxDataType) => {
+    addTimebox: async (addedTimeboxData) => {
       await wait(delayInMiliseconds || 1000);
 
       const customId = Math.floor(
@@ -54,7 +48,7 @@ export const createFakeTimeboxesAPI: CreateFakeTimeboxesAPIType = ({
       return addedTimebox;
     },
 
-    editTimebox: async (editedTimebox: TimeboxType) => {
+    editTimebox: async (editedTimebox) => {
       await wait(delayInMiliseconds || 1000);
 
       const editedTimeboxIndex = getTimeboxIndexById(editedTimebox.id);
@@ -68,7 +62,7 @@ export const createFakeTimeboxesAPI: CreateFakeTimeboxesAPIType = ({
       return editedTimebox;
     },
 
-    partiallyUpdateTimebox: async (timeboxToUpdate: Partial<TimeboxType>) => {
+    partiallyUpdateTimebox: async (timeboxToUpdate) => {
       await wait(delayInMiliseconds || 1000);
 
       if (!timeboxToUpdate.id) {

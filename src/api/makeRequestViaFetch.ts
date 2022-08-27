@@ -16,6 +16,11 @@ type PostRequestViaFetchParamsType = {
 
 type PutRequestViaFetchParamsType = {
   method: 'PUT';
+  data: TimeboxType;
+};
+
+type PatchRequestViaFetchParamsType = {
+  method: 'PATCH';
   data: PartialTimeboxType;
 };
 
@@ -28,6 +33,7 @@ type RequestViaFetchParamsType =
   | GetRequestViaFetchParamsType
   | PostRequestViaFetchParamsType
   | PutRequestViaFetchParamsType
+  | PatchRequestViaFetchParamsType
   | DeleteRequestViaFetchParamsType;
 
 type MakeRequestViaFetchType = (
@@ -55,6 +61,7 @@ export const makeRequestViaFetch: MakeRequestViaFetchType = async ({
       requestBody = data;
       break;
     case 'PUT':
+    case 'PATCH':
       url += `/${data.id}`;
       requestBody = data;
       break;
