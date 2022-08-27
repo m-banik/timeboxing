@@ -73,7 +73,6 @@ export class Timebox extends React.Component<
         <button disabled={!isEditable} onClick={this.handleEdit}>
           Zmień
         </button>
-        <input />
       </div>
     );
   }
