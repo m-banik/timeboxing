@@ -1,19 +1,18 @@
 import { TimeboxType } from '.';
-import { nanoid } from '../utilities';
 
 export const timeboxesSamples: TimeboxType[] = [
   {
-    id: nanoid(),
+    id: 1,
     title: 'Uczę się skrótów klawiszowych',
     totalTimeInMinutes: 25,
   },
   {
-    id: nanoid(),
+    id: 2,
     title: 'Uczę się gita',
     totalTimeInMinutes: 10,
   },
   {
-    id: nanoid(),
+    id: 3,
     title: 'Uczę się Reakta',
     totalTimeInMinutes: 5,
   },
