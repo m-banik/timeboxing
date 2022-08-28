@@ -35,6 +35,16 @@ export const createFakeTimeboxesAPI: CreateFakeTimeboxesAPIType = ({
       return [...timeboxes];
     },
 
+    getTimeboxesByFullTextSearch: async (searchQuery) => {
+      await wait(delayInMiliseconds || 1000);
+
+      const timeboxesByFullTextSearch = timeboxes.filter(({ title }) =>
+        title.includes(searchQuery)
+      );
+
+      return timeboxesByFullTextSearch;
+    },
+
     addTimebox: async (addedTimeboxData) => {
       await wait(delayInMiliseconds || 1000);
 

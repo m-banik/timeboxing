@@ -3,7 +3,13 @@ import { TimeboxCreator, LoadingSpinner, ErrorMessage, Timebox } from '..';
 // ToDo: Changed due to the different data source
 import { createTimeboxesAPI } from '../../api';
 // import { createFakeTimeboxesAPI } from '../../api';
-import { TimeboxType, TimeboxDataHandlerType, IdType } from '../../common';
+import {
+  TimeboxType,
+  TimeboxDataHandlerType,
+  IdType,
+  InputChangeEventHandlerType,
+} from '../../common';
+import './styles.scss';
 
 const timeboxesApi = createTimeboxesAPI();
 // const timeboxesApi = createFakeTimeboxesAPI({ delayInMiliseconds: 4000 });
@@ -22,13 +28,18 @@ export class TimeboxList extends React.Component<{}, TimeboxListStateType> {
   };
 
   componentDidMount() {
+    this.getAllTimeboxes();
+  }
+
+  getAllTimeboxes = () => {
     timeboxesApi
       .getTimeboxes()
       .then((timeboxes) => {
-        this.setState((prevState) => ({ ...prevState, timeboxes }));
-      })
-      .then(() => {
-        this.setState((prevState) => ({ ...prevState, isLoading: false }));
+        this.setState((prevState) => ({
+          ...prevState,
+          timeboxes,
+          isLoading: false,
+        }));
       })
       .catch(() => {
         this.setState((prevState) => ({
@@ -37,7 +48,26 @@ export class TimeboxList extends React.Component<{}, TimeboxListStateType> {
           hasError: true,
         }));
       });
-  }
+  };
+
+  getTimeboxesByPhrase = (phrase: string) => {
+    timeboxesApi
+      .getTimeboxesByFullTextSearch(phrase)
+      .then((timeboxes) => {
+        this.setState((prevState) => ({
+          ...prevState,
+          timeboxes,
+          isLoading: false,
+        }));
+      })
+      .catch(() => {
+        this.setState((prevState) => ({
+          ...prevState,
+          isLoading: false,
+          hasError: true,
+        }));
+      });
+  };
 
   addTimebox: TimeboxDataHandlerType = (addedTimebox) => {
     timeboxesApi.addTimebox(addedTimebox).then((newTimebox) => {
@@ -80,6 +110,16 @@ export class TimeboxList extends React.Component<{}, TimeboxListStateType> {
       });
   };
 
+  handleSearchByPhrase: InputChangeEventHandlerType = ({ target }) => {
+    const { value } = target;
+
+    if (value.length < 1) {
+      this.getAllTimeboxes();
+    } else {
+      this.getTimeboxesByPhrase(value);
+    }
+  };
+
   render() {
     const { isLoading, hasError, timeboxes } = this.state;
 
@@ -93,16 +133,26 @@ export class TimeboxList extends React.Component<{}, TimeboxListStateType> {
             message={'An error occurred in the timebox adding feature.'}
           />
         ) : null}
-        {!isLoading && !hasError
-          ? timeboxes.map((timebox) => (
+        {!isLoading && !hasError ? (
+          <div className="timeboxList">
+            <label className="timeboxList__searchEngine">
+              Szukaj po frazie:
+              <input
+                className="timeboxList__searchEngine__input"
+                type="text"
+                onChange={this.handleSearchByPhrase}
+              />
+            </label>
+            {timeboxes.map((timebox) => (
               <Timebox
                 key={timebox.id}
                 timebox={timebox}
                 onDelete={() => this.removeTimebox(timebox.id)}
                 onEdit={this.updateTimebox}
               />
-            ))
-          : null}
+            ))}
+          </div>
+        ) : null}
       </>
     );
   }

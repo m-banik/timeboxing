@@ -26,6 +26,7 @@ export type ButtonEventHandlerType = MouseEventHandler<HTMLButtonElement>;
 export type TimeboxesApiType = {
   getTimebox: (timeboxId: IdType) => Promise<TimeboxType>;
   getTimeboxes: () => Promise<TimeboxType[]>;
+  getTimeboxesByFullTextSearch: (searchQuery: string) => Promise<TimeboxType[]>;
   addTimebox: (addedTimeboxData: TimeboxDataType) => Promise<TimeboxType>;
   editTimebox: (editedTimebox: TimeboxType) => Promise<TimeboxType>;
   partiallyUpdateTimebox: (

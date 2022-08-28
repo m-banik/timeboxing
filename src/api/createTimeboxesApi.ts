@@ -15,7 +15,7 @@ export const createTimeboxesAPI: CreateTimeboxesAPIType = (config) => {
 
   const TimeboxesApi: TimeboxesApiType = {
     getTimebox: async (timeboxId) =>
-      makeRequestViaFetch({ baseUrl, method: 'GET', data: timeboxId }).then(
+      makeRequestViaFetch({ baseUrl, method: 'GET', id: timeboxId }).then(
         (result) => {
           asssertIsOfTimeboxType(
             result,
@@ -35,6 +35,18 @@ export const createTimeboxesAPI: CreateTimeboxesAPIType = (config) => {
 
         return result;
       }),
+
+    getTimeboxesByFullTextSearch: async (searchQuery) =>
+      makeRequestViaFetch({ baseUrl, method: 'GET', phrase: searchQuery }).then(
+        (result) => {
+          asssertAreOfTimeboxType(
+            result,
+            'Server provided data of an incorrect format!'
+          );
+
+          return result;
+        }
+      ),
 
     addTimebox: async (addedTimeboxData) =>
       makeRequestViaFetch({
@@ -78,7 +90,7 @@ export const createTimeboxesAPI: CreateTimeboxesAPIType = (config) => {
       makeRequestViaFetch({
         baseUrl,
         method: 'DELETE',
-        data: removedTimeboxId,
+        id: removedTimeboxId,
       }),
   };
 

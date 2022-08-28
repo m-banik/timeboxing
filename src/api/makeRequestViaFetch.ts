@@ -7,7 +7,11 @@ import {
 
 const BASE_URL = 'http://localhost:4000/timeboxes';
 
-type GetRequestViaFetchParamsType = { method: 'GET'; data?: IdType };
+type GetRequestViaFetchParamsType = {
+  method: 'GET';
+  id?: IdType;
+  phrase?: string;
+};
 
 type PostRequestViaFetchParamsType = {
   method: 'POST';
@@ -26,7 +30,7 @@ type PatchRequestViaFetchParamsType = {
 
 type DeleteRequestViaFetchParamsType = {
   method: 'DELETE';
-  data: IdType;
+  id: IdType;
 };
 
 type RequestViaFetchParamsType = { baseUrl?: string } & (
@@ -41,40 +45,39 @@ type MakeRequestViaFetchType = (
   params: RequestViaFetchParamsType
 ) => Promise<unknown>;
 
-export const makeRequestViaFetch: MakeRequestViaFetchType = async ({
-  baseUrl,
-  method,
-  data,
-}) => {
-  let url = baseUrl || BASE_URL;
+export const makeRequestViaFetch: MakeRequestViaFetchType = async (params) => {
+  let url = params.baseUrl || BASE_URL;
   let requestBody:
     | TimeboxType
     | TimeboxDataType
     | PartialTimeboxType
     | undefined;
 
-  switch (method) {
+  switch (params.method) {
     case 'GET':
-      if (!!data) {
-        url += `/${data}`;
+      if (typeof params.id === 'number') {
+        url += `/${params.id}`;
+      } else if (params.phrase) {
+        url += `?q=${encodeURIComponent(params.phrase)}`;
       }
+
       break;
     case 'POST':
-      requestBody = data;
+      requestBody = params.data;
       break;
     case 'PUT':
     case 'PATCH':
-      url += `/${data.id}`;
-      requestBody = data;
+      url += `/${params.data.id}`;
+      requestBody = params.data;
       break;
     case 'DELETE':
     default:
-      url += `/${data}`;
+      url += `/${params.id}`;
       break;
   }
 
   const response = await fetch(url, {
-    method,
+    method: params.method,
     headers: {
       'Content-Type': 'application/json',
     },
