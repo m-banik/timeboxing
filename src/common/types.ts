@@ -60,3 +60,10 @@ export type AuthorizationApiType = {
 export type AccessTokenResponseType = {
   accessToken: string;
 };
+
+export type JwtDecodedDataType = {
+  email: string;
+  exp: number;
+  iat: number;
+  sub: string;
+};

@@ -3,6 +3,7 @@ import {
   TimeboxType,
   TimeboxDataType,
   AccessTokenResponseType,
+  JwtDecodedDataType,
 } from '../common';
 
 export function assertObjectIsOfCssVariablesPropertiesType(
@@ -51,23 +52,23 @@ export const checkIfAreOfTimeboxType = (
 
 export function asssertIsOfTimeboxType(
   input: unknown,
-  message = 'Incorrect data type!'
+  errorMessage = 'Incorrect data type!'
 ): asserts input is TimeboxType {
   const instance = input as TimeboxType;
 
   if (!checkIfIsOfTimeboxType(instance)) {
-    throw new Error(message);
+    throw new Error(errorMessage);
   }
 }
 
 export function asssertAreOfTimeboxType(
   input: unknown,
-  message = 'Incorrect data type!'
+  errorMessage = 'Incorrect data type!'
 ): asserts input is TimeboxType[] {
   const instance = input as TimeboxType[];
 
   if (!checkIfAreOfTimeboxType(instance)) {
-    throw new Error(message);
+    throw new Error(errorMessage);
   }
 }
 
@@ -97,23 +98,23 @@ export const checkIfAreOfTimeboxDataType = (
 
 export function asssertIsOfTimeboxDataType(
   input: unknown,
-  message = 'Incorrect data type!'
+  errorMessage = 'Incorrect data type!'
 ): asserts input is TimeboxDataType {
   const instance = input as TimeboxDataType;
 
   if (!checkIfIsOfTimeboxDataType(instance)) {
-    throw new Error(message);
+    throw new Error(errorMessage);
   }
 }
 
 export function asssertAreOfTimeboxDataType(
   input: unknown,
-  message = 'Incorrect data type!'
+  errorMessage = 'Incorrect data type!'
 ): asserts input is TimeboxDataType[] {
   const instance = input as TimeboxDataType[];
 
   if (!checkIfAreOfTimeboxDataType(instance)) {
-    throw new Error(message);
+    throw new Error(errorMessage);
   }
 }
 
@@ -131,9 +132,34 @@ export const checkIfIsOfAccessTokenResponseType = (
 
 export function assertIsOfAccessTokenResponseType(
   input: unknown,
-  message = 'Incorrect data type!'
+  errorMessage = 'Incorrect data type!'
 ): asserts input is AccessTokenResponseType {
   if (!checkIfIsOfAccessTokenResponseType(input)) {
-    throw new Error(message);
+    throw new Error(errorMessage);
+  }
+}
+
+export const checkIfIsOfJwtDecodedDataType = (
+  input: unknown
+): input is JwtDecodedDataType => {
+  const instance = input as JwtDecodedDataType;
+
+  return (
+    typeof instance === 'object' &&
+    !(instance instanceof Array) &&
+    typeof instance.email === 'string' &&
+    typeof instance.exp === 'number' &&
+    typeof instance.iat === 'number' &&
+    instance.iat < instance.exp &&
+    typeof instance.sub === 'string'
+  );
+};
+
+export function assertIsOfJwtDecodedDataType(
+  input: unknown,
+  errorMessage = 'Incorrect data type!'
+): asserts input is JwtDecodedDataType {
+  if (!checkIfIsOfJwtDecodedDataType(input)) {
+    throw new Error(errorMessage);
   }
 }
