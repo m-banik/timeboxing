@@ -3,6 +3,7 @@ import {
   IdType,
   TimeboxDataType,
   TimeboxType,
+  UserLoginDataType,
   PartialTimeboxType,
 } from '../common';
 
@@ -14,7 +15,7 @@ type GetRequestViaFetchParamsType = {
 
 type PostRequestViaFetchParamsType = {
   method: 'POST';
-  data: TimeboxDataType | TimeboxType;
+  data: TimeboxDataType | TimeboxType | UserLoginDataType;
 };
 
 type PutRequestViaFetchParamsType = {
@@ -32,7 +33,10 @@ type DeleteRequestViaFetchParamsType = {
   id: IdType;
 };
 
-type RequestViaFetchParamsType = { baseUrl?: string } & (
+type RequestViaFetchParamsType = {
+  baseUrl?: string;
+  accessToken?: string;
+} & (
   | GetRequestViaFetchParamsType
   | PostRequestViaFetchParamsType
   | PutRequestViaFetchParamsType
@@ -46,9 +50,18 @@ type MakeRequestViaFetchType = (
 
 export const makeRequestViaFetch: MakeRequestViaFetchType = async (params) => {
   let url = params.baseUrl || TIMEBOXES_BASE_URL;
+
+  const headers: HeadersInit = {
+    'Content-Type': 'application/json',
+  };
+  if (params.accessToken) {
+    headers.Authorization = `Bearer ${params.accessToken}`;
+  }
+
   let requestBody:
     | TimeboxType
     | TimeboxDataType
+    | UserLoginDataType
     | PartialTimeboxType
     | undefined;
 
@@ -77,9 +90,7 @@ export const makeRequestViaFetch: MakeRequestViaFetchType = async (params) => {
 
   const response = await fetch(url, {
     method: params.method,
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers,
     body: requestBody ? JSON.stringify(requestBody) : requestBody,
   });
 

@@ -1,12 +1,12 @@
 import { TimeboxesApiType, timeboxesSamples, IdType } from '../common';
 import { wait } from '../utilities';
 
-type CreateFakeTimeboxesAPIConfigType = {
+type CreateFakeTimeboxesApiConfigType = {
   delayInMiliseconds?: number;
 };
 
 type CreateFakeTimeboxesApiType = (
-  config: CreateFakeTimeboxesAPIConfigType
+  config: CreateFakeTimeboxesApiConfigType
 ) => TimeboxesApiType;
 
 export const createFakeTimeboxesApi: CreateFakeTimeboxesApiType = ({

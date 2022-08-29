@@ -24,13 +24,39 @@ export type InputChangeEventHandlerType = ChangeEventHandler<HTMLInputElement>;
 export type ButtonEventHandlerType = MouseEventHandler<HTMLButtonElement>;
 
 export type TimeboxesApiType = {
-  getTimebox: (timeboxId: IdType) => Promise<TimeboxType>;
-  getTimeboxes: () => Promise<TimeboxType[]>;
-  getTimeboxesByFullTextSearch: (searchQuery: string) => Promise<TimeboxType[]>;
-  addTimebox: (addedTimeboxData: TimeboxDataType) => Promise<TimeboxType>;
-  editTimebox: (editedTimebox: TimeboxType) => Promise<TimeboxType>;
-  partiallyUpdateTimebox: (
-    partiallyUpdatedTimebox: PartialTimeboxType
+  getTimebox: (timeboxId: IdType, accessToken?: string) => Promise<TimeboxType>;
+  getTimeboxes: (accessToken?: string) => Promise<TimeboxType[]>;
+  getTimeboxesByFullTextSearch: (
+    searchQuery: string,
+    accessToken?: string
+  ) => Promise<TimeboxType[]>;
+  addTimebox: (
+    addedTimeboxData: TimeboxDataType,
+    accessToken?: string
   ) => Promise<TimeboxType>;
-  removeTimebox: (removedTimeboxId: IdType) => Promise<unknown>;
+  editTimebox: (
+    editedTimebox: TimeboxType,
+    accessToken?: string
+  ) => Promise<TimeboxType>;
+  partiallyUpdateTimebox: (
+    partiallyUpdatedTimebox: PartialTimeboxType,
+    accessToken?: string
+  ) => Promise<TimeboxType>;
+  removeTimebox: (
+    removedTimeboxId: IdType,
+    accessToken?: string
+  ) => Promise<unknown>;
+};
+
+export type UserLoginDataType = {
+  email: string;
+  password: string;
+};
+
+export type AuthorizationApiType = {
+  login: (userLoginData: UserLoginDataType) => Promise<string>;
+};
+
+export type AccessTokenResponseType = {
+  accessToken: string;
 };

@@ -3,15 +3,15 @@ import { TIMEBOXES_BASE_URL } from '.';
 import { TimeboxesApiType } from '../common';
 import { asssertIsOfTimeboxType, asssertAreOfTimeboxType } from '../utilities';
 
-type CreateTimeboxesAPIConfigType = {
+type CreateTimeboxesApiConfigType = {
   baseUrl?: string;
 };
 
-type createAxiosTimeboxesApiType = (
-  config?: CreateTimeboxesAPIConfigType
+type CreateAxiosTimeboxesApiType = (
+  config?: CreateTimeboxesApiConfigType
 ) => TimeboxesApiType;
 
-export const createAxiosTimeboxesApi: createAxiosTimeboxesApiType = (
+export const createAxiosTimeboxesApi: CreateAxiosTimeboxesApiType = (
   config
 ) => {
   const baseUrl = config?.baseUrl || TIMEBOXES_BASE_URL;

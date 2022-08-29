@@ -1,5 +1,9 @@
 import { CSSProperties } from 'react';
-import { TimeboxType, TimeboxDataType } from '../common';
+import {
+  TimeboxType,
+  TimeboxDataType,
+  AccessTokenResponseType,
+} from '../common';
 
 export function assertObjectIsOfCssVariablesPropertiesType(
   input: unknown,
@@ -109,6 +113,27 @@ export function asssertAreOfTimeboxDataType(
   const instance = input as TimeboxDataType[];
 
   if (!checkIfAreOfTimeboxDataType(instance)) {
+    throw new Error(message);
+  }
+}
+
+export const checkIfIsOfAccessTokenResponseType = (
+  input: unknown
+): input is AccessTokenResponseType => {
+  const instance = input as AccessTokenResponseType;
+
+  return (
+    typeof instance === 'object' &&
+    !(instance instanceof Array) &&
+    typeof instance.accessToken === 'string'
+  );
+};
+
+export function assertIsOfAccessTokenResponseType(
+  input: unknown,
+  message = 'Incorrect data type!'
+): asserts input is AccessTokenResponseType {
+  if (!checkIfIsOfAccessTokenResponseType(input)) {
     throw new Error(message);
   }
 }
