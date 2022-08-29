@@ -1,0 +1,18 @@
+@import '../../styles/variables.scss';
+
+.loginForm {
+  text-align: right;
+  border: $default-border;
+  border-radius: $border-radius;
+  padding: 20px;
+  margin-bottom: 20px;
+  background-color: lighten(aqua, 40);
+
+  &__errorMessage {
+    padding: 10px;
+    border: 1px solid red;
+    border-radius: 5px;
+    color: red;
+    text-align: center;
+  }
+}

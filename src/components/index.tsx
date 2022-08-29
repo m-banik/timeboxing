@@ -5,6 +5,7 @@ export * from './editable-timebox';
 export * from './error-boundary';
 export * from './error-message';
 export * from './loading-spinner';
+export * from './login-form';
 export * from './progress-bar';
 export * from './real-time-clock';
 export * from './timebox';
