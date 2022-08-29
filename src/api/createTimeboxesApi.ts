@@ -6,11 +6,11 @@ type CreateTimeboxesAPIConfigType = {
   baseUrl?: string;
 };
 
-type CreateTimeboxesAPIType = (
+type CreateTimeboxesApiType = (
   config?: CreateTimeboxesAPIConfigType
 ) => TimeboxesApiType;
 
-export const createTimeboxesAPI: CreateTimeboxesAPIType = (config) => {
+export const createTimeboxesApi: CreateTimeboxesApiType = (config) => {
   const baseUrl = config?.baseUrl;
 
   const TimeboxesApi: TimeboxesApiType = {
@@ -54,7 +54,6 @@ export const createTimeboxesAPI: CreateTimeboxesAPIType = (config) => {
         method: 'POST',
         data: addedTimeboxData,
       }).then((result) => {
-        console.log(result);
         asssertIsOfTimeboxType(
           result,
           'Server provided data of an incorrect format!'

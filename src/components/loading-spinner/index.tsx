@@ -10,7 +10,7 @@ export const LoadingSpinner: React.FC<LoadingSpinnerPropsType> = ({
   fullWidth,
 }) => {
   const classNames = CN('LoadingSpinner', {
-    ['LoadingSpinner--centered']: fullWidth,
+    'LoadingSpinner--centered': fullWidth,
   });
   return (
     <div className={classNames}>

@@ -1,11 +1,10 @@
+import { TIMEBOXES_BASE_URL } from '.';
 import {
   IdType,
   TimeboxDataType,
   TimeboxType,
   PartialTimeboxType,
 } from '../common';
-
-const BASE_URL = 'http://localhost:4000/timeboxes';
 
 type GetRequestViaFetchParamsType = {
   method: 'GET';
@@ -46,7 +45,7 @@ type MakeRequestViaFetchType = (
 ) => Promise<unknown>;
 
 export const makeRequestViaFetch: MakeRequestViaFetchType = async (params) => {
-  let url = params.baseUrl || BASE_URL;
+  let url = params.baseUrl || TIMEBOXES_BASE_URL;
   let requestBody:
     | TimeboxType
     | TimeboxDataType

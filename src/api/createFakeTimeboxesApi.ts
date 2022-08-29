@@ -5,11 +5,11 @@ type CreateFakeTimeboxesAPIConfigType = {
   delayInMiliseconds?: number;
 };
 
-type CreateFakeTimeboxesAPIType = (
+type CreateFakeTimeboxesApiType = (
   config: CreateFakeTimeboxesAPIConfigType
 ) => TimeboxesApiType;
 
-export const createFakeTimeboxesAPI: CreateFakeTimeboxesAPIType = ({
+export const createFakeTimeboxesApi: CreateFakeTimeboxesApiType = ({
   delayInMiliseconds,
 }) => {
   const timeboxes = [...timeboxesSamples];
