@@ -2,8 +2,8 @@ import React from 'react';
 import { TimeboxCreator, LoadingSpinner, ErrorMessage, Timebox } from '..';
 // ToDo: Changed due to the different data source
 // import { createFakeTimeboxesApi } from '../../api';
-// import { createFetchTimeboxesApi } from '../../api';
-import { createAxiosTimeboxesApi } from '../../api';
+import { createFetchTimeboxesApi } from '../../api';
+// import { createAxiosTimeboxesApi } from '../../api';
 import {
   TimeboxType,
   TimeboxDataHandlerType,
@@ -12,11 +12,19 @@ import {
 } from '../../common';
 import './styles.scss';
 
-const timeboxesApi = createAxiosTimeboxesApi({
-  // const timeboxesApi = createFakeTimeboxesApi({ delayInMiliseconds: 4000 });
-  // const timeboxesApi = createFetchTimeboxesApi();
+// const timeboxesApi = createFakeTimeboxesApi({ delayInMiliseconds: 4000 });
+
+const timeboxesApi = createFetchTimeboxesApi({
   baseUrl: 'http://localhost:4001/timeboxes',
 });
+
+// const timeboxesApi = createAxiosTimeboxesApi({
+//   baseUrl: 'http://localhost:4001/timeboxes',
+// });
+
+type TimeboxListPropsType = {
+  accessToken?: string;
+};
 
 type TimeboxListStateType = {
   isLoading: boolean;
@@ -24,7 +32,10 @@ type TimeboxListStateType = {
   timeboxes: TimeboxType[];
 };
 
-export class TimeboxList extends React.Component<{}, TimeboxListStateType> {
+export class TimeboxList extends React.Component<
+  TimeboxListPropsType,
+  TimeboxListStateType
+> {
   state: TimeboxListStateType = {
     isLoading: true,
     hasError: false,
@@ -37,7 +48,7 @@ export class TimeboxList extends React.Component<{}, TimeboxListStateType> {
 
   getAllTimeboxes = () => {
     timeboxesApi
-      .getTimeboxes()
+      .getTimeboxes(this.props.accessToken)
       .then((timeboxes) => {
         this.setState((prevState) => ({
           ...prevState,
@@ -56,7 +67,7 @@ export class TimeboxList extends React.Component<{}, TimeboxListStateType> {
 
   getTimeboxesByPhrase = (phrase: string) => {
     timeboxesApi
-      .getTimeboxesByFullTextSearch(phrase)
+      .getTimeboxesByFullTextSearch(phrase, this.props.accessToken)
       .then((timeboxes) => {
         this.setState((prevState) => ({
           ...prevState,
@@ -74,17 +85,19 @@ export class TimeboxList extends React.Component<{}, TimeboxListStateType> {
   };
 
   addTimebox: TimeboxDataHandlerType = (addedTimebox) => {
-    timeboxesApi.addTimebox(addedTimebox).then((newTimebox) => {
-      this.setState((prevState) => ({
-        ...prevState,
-        timeboxes: [...prevState.timeboxes, newTimebox],
-      }));
-    });
+    timeboxesApi
+      .addTimebox(addedTimebox, this.props.accessToken)
+      .then((newTimebox) => {
+        this.setState((prevState) => ({
+          ...prevState,
+          timeboxes: [...prevState.timeboxes, newTimebox],
+        }));
+      });
   };
 
   updateTimebox = (updatedTimebox: TimeboxType) => {
     timeboxesApi
-      .partiallyUpdateTimebox(updatedTimebox)
+      .partiallyUpdateTimebox(updatedTimebox, this.props.accessToken)
       .then((newTimeBox) => {
         this.setState((prevState) => {
           const timeboxes = prevState.timeboxes.map((timebox) =>
@@ -100,7 +113,7 @@ export class TimeboxList extends React.Component<{}, TimeboxListStateType> {
 
   removeTimebox = (removedTimeboxId: IdType) => {
     timeboxesApi
-      .removeTimebox(removedTimeboxId)
+      .removeTimebox(removedTimeboxId, this.props.accessToken)
       .then(() => {
         this.setState((prevState) => ({
           ...prevState,
