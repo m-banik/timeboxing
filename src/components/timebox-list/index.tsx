@@ -1,8 +1,9 @@
 import React from 'react';
 import { TimeboxCreator, LoadingSpinner, ErrorMessage, Timebox } from '..';
 // ToDo: Changed due to the different data source
-import { createTimeboxesAPI } from '../../api';
-// import { createFakeTimeboxesAPI } from '../../api';
+// import { createTimeboxesApi } from '../../api';
+// import { createFakeTimeboxesApi } from '../../api';
+import { createAxiosTimeboxesApi } from '../../api';
 import {
   TimeboxType,
   TimeboxDataHandlerType,
@@ -11,8 +12,9 @@ import {
 } from '../../common';
 import './styles.scss';
 
-const timeboxesApi = createTimeboxesAPI();
-// const timeboxesApi = createFakeTimeboxesAPI({ delayInMiliseconds: 4000 });
+// const timeboxesApi = createTimeboxesApi();
+// const timeboxesApi = createFakeTimeboxesApi({ delayInMiliseconds: 4000 });
+const timeboxesApi = createAxiosTimeboxesApi();
 
 type TimeboxListStateType = {
   isLoading: boolean;
