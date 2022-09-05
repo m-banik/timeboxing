@@ -1,17 +1,9 @@
 import axios from 'axios';
 import { LOGIN_BASE_URL } from '../api';
-import { AuthorizationApiType } from '../common';
+import { CreateAuthorizationApiType, AuthorizationApiType } from '../common';
 import { assertIsOfAccessTokenResponseType } from '../utilities';
 
-type CreateAxiosAuthorizationApiConfigType = {
-  baseUrl?: string;
-};
-
-type CreateAxiosAuthorizationApiType = (
-  config?: CreateAxiosAuthorizationApiConfigType
-) => AuthorizationApiType;
-
-export const createAxiosAuthorizationApi: CreateAxiosAuthorizationApiType = (
+export const createAxiosAuthorizationApi: CreateAuthorizationApiType = (
   config
 ) => {
   const baseUrl = config?.baseUrl || LOGIN_BASE_URL;

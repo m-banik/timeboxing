@@ -1,17 +1,9 @@
 import { makeRequestViaFetch } from '.';
 import { LOGIN_BASE_URL } from '../api';
-import { AuthorizationApiType } from '../common';
+import { CreateAuthorizationApiType, AuthorizationApiType } from '../common';
 import { assertIsOfAccessTokenResponseType } from '../utilities';
 
-type CreateFetchAuthorizationApiConfigType = {
-  baseUrl?: string;
-};
-
-type CreateFetchAuthorizationApiType = (
-  config?: CreateFetchAuthorizationApiConfigType
-) => AuthorizationApiType;
-
-export const createFetchAuthorizationApi: CreateFetchAuthorizationApiType = (
+export const createFetchAuthorizationApi: CreateAuthorizationApiType = (
   config
 ) => {
   const baseUrl = config?.baseUrl || LOGIN_BASE_URL;

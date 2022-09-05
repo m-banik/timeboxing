@@ -57,6 +57,14 @@ export type AuthorizationApiType = {
   login: (userLoginData: UserLoginDataType) => Promise<string>;
 };
 
+export type CreateAuthorizationApiConfigType = {
+  baseUrl?: string;
+};
+
+export type CreateAuthorizationApiType = (
+  config: CreateAuthorizationApiConfigType
+) => AuthorizationApiType;
+
 export type AccessTokenResponseType = {
   accessToken: string;
 };
