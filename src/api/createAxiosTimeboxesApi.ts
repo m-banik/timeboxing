@@ -1,24 +1,35 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig } from 'axios';
 import { TIMEBOXES_BASE_URL } from '.';
 import { CreateTimeboxesApiType, TimeboxesApiType } from '../common';
 import { asssertIsOfTimeboxType, asssertAreOfTimeboxType } from '../utilities';
+
+const createRequestConfig = (accessToken?: string) => {
+  const requestConfig: AxiosRequestConfig = {};
+  if (typeof accessToken === 'string') {
+    requestConfig.headers = {
+      Authorization: `Bearer ${accessToken}`,
+    };
+  }
+  return requestConfig;
+};
 
 export const createAxiosTimeboxesApi: CreateTimeboxesApiType = (config) => {
   const baseUrl = config?.baseUrl || TIMEBOXES_BASE_URL;
 
   const TimeboxesApi: TimeboxesApiType = {
-    getTimebox: async (timeboxId) =>
-      axios.get(`${baseUrl}/${timeboxId}`).then(({ data }) => {
-        asssertIsOfTimeboxType(
-          data,
-          'Server provided data of an incorrect format!'
-        );
+    getTimebox: async (timeboxId, accessToken) =>
+      axios
+        .get(`${baseUrl}/${timeboxId}`, createRequestConfig(accessToken))
+        .then(({ data }) => {
+          asssertIsOfTimeboxType(
+            data,
+            'Server provided data of an incorrect format!'
+          );
 
-        return data;
-      }),
-
-    getTimeboxes: async () =>
-      axios.get(baseUrl).then(({ data }) => {
+          return data;
+        }),
+    getTimeboxes: async (accessToken) =>
+      axios.get(baseUrl, createRequestConfig(accessToken)).then(({ data }) => {
         asssertAreOfTimeboxType(
           data,
           'Server provided data of an incorrect format!'
@@ -27,9 +38,12 @@ export const createAxiosTimeboxesApi: CreateTimeboxesApiType = (config) => {
         return data;
       }),
 
-    getTimeboxesByFullTextSearch: async (searchQuery) =>
+    getTimeboxesByFullTextSearch: async (searchQuery, accessToken) =>
       axios
-        .get(`${baseUrl}?q=${encodeURIComponent(searchQuery)}`)
+        .get(
+          `${baseUrl}?q=${encodeURIComponent(searchQuery)}`,
+          createRequestConfig(accessToken)
+        )
         .then(({ data }) => {
           asssertAreOfTimeboxType(
             data,
@@ -39,29 +53,34 @@ export const createAxiosTimeboxesApi: CreateTimeboxesApiType = (config) => {
           return data;
         }),
 
-    addTimebox: async (addedTimeboxData) =>
-      axios.post(baseUrl, addedTimeboxData).then(({ data }) => {
-        asssertIsOfTimeboxType(
-          data,
-          'Server provided data of an incorrect format!'
-        );
-        return data;
-      }),
+    addTimebox: async (addedTimeboxData, accessToken) =>
+      axios
+        .post(baseUrl, addedTimeboxData, createRequestConfig(accessToken))
+        .then(({ data }) => {
+          asssertIsOfTimeboxType(
+            data,
+            'Server provided data of an incorrect format!'
+          );
+          return data;
+        }),
 
-    editTimebox: async (editedTimebox) =>
-      axios.put(baseUrl, editedTimebox).then(({ data }) => {
-        asssertIsOfTimeboxType(
-          data,
-          'Server provided data of an incorrect format!'
-        );
-        return data;
-      }),
+    editTimebox: async (editedTimebox, accessToken) =>
+      axios
+        .put(baseUrl, editedTimebox, createRequestConfig(accessToken))
+        .then(({ data }) => {
+          asssertIsOfTimeboxType(
+            data,
+            'Server provided data of an incorrect format!'
+          );
+          return data;
+        }),
 
-    partiallyUpdateTimebox: async (partiallyUpdatedTimebox) =>
+    partiallyUpdateTimebox: async (partiallyUpdatedTimebox, accessToken) =>
       axios
         .patch(
           `${baseUrl}/${partiallyUpdatedTimebox.id}`,
-          partiallyUpdatedTimebox
+          partiallyUpdatedTimebox,
+          createRequestConfig(accessToken)
         )
         .then(({ data }) => {
           asssertIsOfTimeboxType(
@@ -71,8 +90,11 @@ export const createAxiosTimeboxesApi: CreateTimeboxesApiType = (config) => {
           return data;
         }),
 
-    removeTimebox: async (removedTimeboxId) =>
-      axios.delete(`${baseUrl}/${removedTimeboxId}`),
+    removeTimebox: async (removedTimeboxId, accessToken) =>
+      axios.delete(
+        `${baseUrl}/${removedTimeboxId}`,
+        createRequestConfig(accessToken)
+      ),
   };
 
   return TimeboxesApi;
