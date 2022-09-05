@@ -1,12 +1,17 @@
 import React from 'react';
 import { LoadingSpinner } from '..';
-import { createFetchAuthorizationApi } from '../../api';
+import { createAxiosAuthorizationApi } from '../../api';
+// import { createFetchAuthorizationApi } from '../../api';
 import { UserLoginDataType } from '../../common';
 import './styles.scss';
 
-const authorizationApi = createFetchAuthorizationApi({
+const authorizationApi = createAxiosAuthorizationApi({
   baseUrl: 'http://localhost:4001/login',
 });
+
+// const authorizationApi = createFetchAuthorizationApi({
+//   baseUrl: 'http://localhost:4001/login',
+// });
 
 type LoginFormPropsType = {
   onLogin: (accessToken: string) => void;
