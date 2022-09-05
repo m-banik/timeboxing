@@ -32,7 +32,8 @@ export class App extends React.Component<{}, AppStateType> {
     this.saveAccessTokenInLocalStorage(accessToken);
 
     const tokenExpirationTimestamp = this.getTokenExpirationTimestamp() || 0;
-    const sessionDuration = tokenExpirationTimestamp - new Date().getTime();
+    const sessionDuration =
+      tokenExpirationTimestamp * 1000 - new Date().getTime();
 
     if (sessionDuration >= 5000) {
       this.setState((prevState) => ({ ...prevState, accessToken }));
