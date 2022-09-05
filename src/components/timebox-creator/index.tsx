@@ -29,6 +29,15 @@ export class TimeboxCreator extends React.Component<TimeboxCreatorPropsType> {
         title,
         totalTimeInMinutes,
       });
+
+      this.resetInputs();
+    }
+  };
+
+  resetInputs = () => {
+    if (this.titleRef.current && this.totalTimeInMinutesRef.current) {
+      this.titleRef.current.value = '';
+      this.totalTimeInMinutesRef.current.value = '';
     }
   };
 

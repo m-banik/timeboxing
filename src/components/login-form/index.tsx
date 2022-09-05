@@ -87,7 +87,7 @@ export class LoginForm extends React.Component<
         ) : null}
         <label>
           E-mail:
-          <input ref={this.emailRef} type="text" />
+          <input ref={this.emailRef} type="email" />
         </label>
         <br />
         <label>
