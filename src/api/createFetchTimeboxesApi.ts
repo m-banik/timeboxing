@@ -1,18 +1,8 @@
 import { makeRequestViaFetch } from '.';
-import { TimeboxesApiType } from '../common';
+import { CreateTimeboxesApiType, TimeboxesApiType } from '../common';
 import { asssertIsOfTimeboxType, asssertAreOfTimeboxType } from '../utilities';
 
-type CreateFetchTimeboxesAPIConfigType = {
-  baseUrl?: string;
-};
-
-type CreateFetchTimeboxesApiType = (
-  config?: CreateFetchTimeboxesAPIConfigType
-) => TimeboxesApiType;
-
-export const createFetchTimeboxesApi: CreateFetchTimeboxesApiType = (
-  config
-) => {
+export const createFetchTimeboxesApi: CreateTimeboxesApiType = (config) => {
   const baseUrl = config?.baseUrl;
 
   const TimeboxesApi: TimeboxesApiType = {

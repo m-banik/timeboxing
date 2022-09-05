@@ -1,19 +1,9 @@
 import axios from 'axios';
 import { TIMEBOXES_BASE_URL } from '.';
-import { TimeboxesApiType } from '../common';
+import { CreateTimeboxesApiType, TimeboxesApiType } from '../common';
 import { asssertIsOfTimeboxType, asssertAreOfTimeboxType } from '../utilities';
 
-type CreateTimeboxesApiConfigType = {
-  baseUrl?: string;
-};
-
-type CreateAxiosTimeboxesApiType = (
-  config?: CreateTimeboxesApiConfigType
-) => TimeboxesApiType;
-
-export const createAxiosTimeboxesApi: CreateAxiosTimeboxesApiType = (
-  config
-) => {
+export const createAxiosTimeboxesApi: CreateTimeboxesApiType = (config) => {
   const baseUrl = config?.baseUrl || TIMEBOXES_BASE_URL;
 
   const TimeboxesApi: TimeboxesApiType = {

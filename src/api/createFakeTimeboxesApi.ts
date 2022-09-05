@@ -1,17 +1,20 @@
-import { TimeboxesApiType, timeboxesSamples, IdType } from '../common';
+import {
+  CreateTimeboxesApiType,
+  timeboxesSamples,
+  IdType,
+  TimeboxesApiType,
+} from '../common';
 import { wait } from '../utilities';
 
 type CreateFakeTimeboxesApiConfigType = {
   delayInMiliseconds?: number;
 };
 
-type CreateFakeTimeboxesApiType = (
-  config: CreateFakeTimeboxesApiConfigType
-) => TimeboxesApiType;
+type CreateFakeTimeboxesApiType =
+  CreateTimeboxesApiType<CreateFakeTimeboxesApiConfigType>;
 
-export const createFakeTimeboxesApi: CreateFakeTimeboxesApiType = ({
-  delayInMiliseconds,
-}) => {
+export const createFakeTimeboxesApi: CreateFakeTimeboxesApiType = (config) => {
+  const delayInMiliseconds = config?.delayInMiliseconds || 1000;
   const timeboxes = [...timeboxesSamples];
 
   const getTimeboxIndexById = (searchedId: IdType) =>
@@ -19,7 +22,7 @@ export const createFakeTimeboxesApi: CreateFakeTimeboxesApiType = ({
 
   const FakeTimeboxesApi: TimeboxesApiType = {
     getTimebox: async (timeboxId) => {
-      await wait(delayInMiliseconds || 1000);
+      await wait(delayInMiliseconds);
 
       const searchedTimeboxIndex = getTimeboxIndexById(timeboxId);
 
@@ -31,12 +34,12 @@ export const createFakeTimeboxesApi: CreateFakeTimeboxesApiType = ({
     },
 
     getTimeboxes: async () => {
-      await wait(delayInMiliseconds || 1000);
+      await wait(delayInMiliseconds);
       return [...timeboxes];
     },
 
     getTimeboxesByFullTextSearch: async (searchQuery) => {
-      await wait(delayInMiliseconds || 1000);
+      await wait(delayInMiliseconds);
 
       const timeboxesByFullTextSearch = timeboxes.filter(({ title }) =>
         title.includes(searchQuery)
@@ -46,7 +49,7 @@ export const createFakeTimeboxesApi: CreateFakeTimeboxesApiType = ({
     },
 
     addTimebox: async (addedTimeboxData) => {
-      await wait(delayInMiliseconds || 1000);
+      await wait(delayInMiliseconds);
 
       const customId = Math.floor(
         Math.random() * 1000000000000 + timeboxes.length
@@ -59,7 +62,7 @@ export const createFakeTimeboxesApi: CreateFakeTimeboxesApiType = ({
     },
 
     editTimebox: async (editedTimebox) => {
-      await wait(delayInMiliseconds || 1000);
+      await wait(delayInMiliseconds);
 
       const editedTimeboxIndex = getTimeboxIndexById(editedTimebox.id);
 
@@ -73,7 +76,7 @@ export const createFakeTimeboxesApi: CreateFakeTimeboxesApiType = ({
     },
 
     partiallyUpdateTimebox: async (timeboxToUpdate) => {
-      await wait(delayInMiliseconds || 1000);
+      await wait(delayInMiliseconds);
 
       if (!timeboxToUpdate.id) {
         throw new Error('The provided timebox object has no ID key included!');
@@ -96,7 +99,7 @@ export const createFakeTimeboxesApi: CreateFakeTimeboxesApiType = ({
     },
 
     removeTimebox: async (removedTimeboxId: IdType) => {
-      await wait(delayInMiliseconds || 1000);
+      await wait(delayInMiliseconds);
 
       const removedTimeboxIndex = getTimeboxIndexById(removedTimeboxId);
 

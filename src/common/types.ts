@@ -48,6 +48,14 @@ export type TimeboxesApiType = {
   ) => Promise<unknown>;
 };
 
+export type CreateTimeboxesAPIConfigType = {
+  baseUrl?: string;
+};
+
+export type CreateTimeboxesApiType<T = {}> = (
+  config?: CreateTimeboxesAPIConfigType & T
+) => TimeboxesApiType;
+
 export type UserLoginDataType = {
   email: string;
   password: string;
