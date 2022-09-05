@@ -1,9 +1,9 @@
 import React from 'react';
 import { TimeboxCreator, LoadingSpinner, ErrorMessage, Timebox } from '..';
 // ToDo: Changed due to the different data source
-// import { createFakeTimeboxesApi } from '../../api';
+import { createFakeTimeboxesApi } from '../../api';
 // import { createFetchTimeboxesApi } from '../../api';
-import { createAxiosTimeboxesApi } from '../../api';
+// import { createAxiosTimeboxesApi } from '../../api';
 import {
   TimeboxType,
   TimeboxDataHandlerType,
@@ -12,15 +12,15 @@ import {
 } from '../../common';
 import './styles.scss';
 
-// const timeboxesApi = createFakeTimeboxesApi({ delayInMiliseconds: 4000 });
+const timeboxesApi = createFakeTimeboxesApi({ delayInMiliseconds: 1000 });
 
 // const timeboxesApi = createFetchTimeboxesApi({
 //   baseUrl: 'http://localhost:4001/timeboxes',
 // });
 
-const timeboxesApi = createAxiosTimeboxesApi({
-  baseUrl: 'http://localhost:4001/timeboxes',
-});
+// const timeboxesApi = createAxiosTimeboxesApi({
+//   baseUrl: 'http://localhost:4001/timeboxes',
+// });
 
 type TimeboxListPropsType = {
   accessToken?: string;
