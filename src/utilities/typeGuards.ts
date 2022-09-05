@@ -31,7 +31,7 @@ export const checkIfIsOfTimeboxType = (
   const instance = input as TimeboxType;
 
   return (
-    typeof instance === 'object' &&
+    instance instanceof Object &&
     !(instance instanceof Array) &&
     typeof instance.id === 'number' &&
     typeof instance.title === 'string' &&
@@ -78,7 +78,7 @@ export const checkIfIsOfTimeboxDataType = (
   const instance = input as TimeboxDataType;
 
   return (
-    typeof instance === 'object' &&
+    instance instanceof Object &&
     !(instance instanceof Array) &&
     typeof instance.title === 'string' &&
     typeof instance.totalTimeInMinutes === 'number'
@@ -124,7 +124,7 @@ export const checkIfIsOfAccessTokenResponseType = (
   const instance = input as AccessTokenResponseType;
 
   return (
-    typeof instance === 'object' &&
+    instance instanceof Object &&
     !(instance instanceof Array) &&
     typeof instance.accessToken === 'string'
   );
@@ -145,7 +145,7 @@ export const checkIfIsOfJwtDecodedDataType = (
   const instance = input as JwtDecodedDataType;
 
   return (
-    typeof instance === 'object' &&
+    instance instanceof Object &&
     !(instance instanceof Array) &&
     typeof instance.email === 'string' &&
     typeof instance.exp === 'number' &&

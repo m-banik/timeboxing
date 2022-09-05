@@ -10,7 +10,7 @@ type AppStateType = {
 };
 
 export class App extends React.Component<{}, AppStateType> {
-  state = {
+  state: AppStateType = {
     accessToken: null,
   };
 
@@ -20,8 +20,7 @@ export class App extends React.Component<{}, AppStateType> {
     const accessToken = this.getAccessTokenFromLocalStorage();
 
     if (accessToken !== null) {
-      this.setState((prevState) => ({ ...prevState, accessToken }));
-      this.setLogoutTimeout();
+      this.handleLoginAttempt(accessToken);
     }
   }
 
@@ -31,8 +30,16 @@ export class App extends React.Component<{}, AppStateType> {
 
   handleLoginAttempt = (accessToken: string) => {
     this.saveAccessTokenInLocalStorage(accessToken);
-    this.setState((prevState) => ({ ...prevState, accessToken }));
-    this.setLogoutTimeout();
+
+    const tokenExpirationTimestamp = this.getTokenExpirationTimestamp() || 0;
+    const sessionDuration = tokenExpirationTimestamp - new Date().getTime();
+
+    if (sessionDuration >= 5000) {
+      this.setState((prevState) => ({ ...prevState, accessToken }));
+      this.setLogoutTimeout(sessionDuration);
+    } else {
+      this.removeAccessTokenFromLocalStorage();
+    }
   };
 
   handleLogout = () => {
@@ -68,21 +75,23 @@ export class App extends React.Component<{}, AppStateType> {
     }
   };
 
-  getDecodedDataFromAccessToken = (): JwtDecodedDataType | void => {
-    const { accessToken } = this.state;
-    if (accessToken === null) {
-      return;
-    }
+  getDecodedDataFromAccessToken = (): JwtDecodedDataType | undefined => {
+    const accessToken = this.getAccessTokenFromLocalStorage();
+    const decodedData = accessToken ? decode(accessToken) : accessToken;
 
-    const decodedData = decode(accessToken);
     if (checkIfIsOfJwtDecodedDataType(decodedData)) {
       return decodedData;
     }
   };
 
-  getUserEmail = (): string | void => {
+  getUserEmail = (): string | null => {
     const decodedData = this.getDecodedDataFromAccessToken();
-    return decodedData?.email;
+    return decodedData?.email || null;
+  };
+
+  getTokenExpirationTimestamp = (): number | null => {
+    const decodedData = this.getDecodedDataFromAccessToken();
+    return decodedData?.exp || null;
   };
 
   render() {
