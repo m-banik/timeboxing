@@ -14,17 +14,25 @@ export class App extends React.Component<{}, AppStateType> {
     accessToken: null,
   };
 
+  logoutTimeoutId: number | null = null;
+
   componentDidMount() {
-    const accessToken = window.localStorage.getItem('accessToken');
+    const accessToken = this.getAccessTokenFromLocalStorage();
 
     if (accessToken !== null) {
       this.setState((prevState) => ({ ...prevState, accessToken }));
+      this.setLogoutTimeout();
     }
+  }
+
+  componentWillUnmount() {
+    this.clearLogoutTimeout();
   }
 
   handleLoginAttempt = (accessToken: string) => {
     this.saveAccessTokenInLocalStorage(accessToken);
     this.setState((prevState) => ({ ...prevState, accessToken }));
+    this.setLogoutTimeout();
   };
 
   handleLogout = () => {
@@ -34,13 +42,31 @@ export class App extends React.Component<{}, AppStateType> {
 
     this.removeAccessTokenFromLocalStorage();
     this.setState((prevState) => ({ ...prevState, accessToken: null }));
+    this.clearLogoutTimeout();
   };
 
   saveAccessTokenInLocalStorage = (accessToken: string) =>
     window.localStorage.setItem('accessToken', accessToken);
 
+  getAccessTokenFromLocalStorage = () =>
+    window.localStorage.getItem('accessToken');
+
   removeAccessTokenFromLocalStorage = () =>
     window.localStorage.removeItem('accessToken');
+
+  setLogoutTimeout = (sessionDuration = 60 * 60 * 1000) => {
+    this.logoutTimeoutId = window.setTimeout(
+      this.handleLogout,
+      sessionDuration
+    );
+  };
+
+  clearLogoutTimeout = () => {
+    if (this.logoutTimeoutId !== null) {
+      window.clearTimeout(this.logoutTimeoutId);
+      this.logoutTimeoutId = null;
+    }
+  };
 
   getDecodedDataFromAccessToken = (): JwtDecodedDataType | void => {
     const { accessToken } = this.state;
