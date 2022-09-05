@@ -14,12 +14,33 @@ export class App extends React.Component<{}, AppStateType> {
     accessToken: null,
   };
 
+  componentDidMount() {
+    const accessToken = window.localStorage.getItem('accessToken');
+
+    if (accessToken !== null) {
+      this.setState((prevState) => ({ ...prevState, accessToken }));
+    }
+  }
+
   handleLoginAttempt = (accessToken: string) => {
+    this.saveAccessTokenInLocalStorage(accessToken);
     this.setState((prevState) => ({ ...prevState, accessToken }));
   };
 
-  handleLogout = () =>
+  handleLogout = () => {
+    if (this.state.accessToken === null) {
+      return;
+    }
+
+    this.removeAccessTokenFromLocalStorage();
     this.setState((prevState) => ({ ...prevState, accessToken: null }));
+  };
+
+  saveAccessTokenInLocalStorage = (accessToken: string) =>
+    window.localStorage.setItem('accessToken', accessToken);
+
+  removeAccessTokenFromLocalStorage = () =>
+    window.localStorage.removeItem('accessToken');
 
   getDecodedDataFromAccessToken = (): JwtDecodedDataType | void => {
     const { accessToken } = this.state;
