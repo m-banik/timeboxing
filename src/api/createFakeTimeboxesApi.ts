@@ -1,9 +1,4 @@
-import {
-  CreateTimeboxesApiType,
-  timeboxesSamples,
-  IdType,
-  TimeboxesApiType,
-} from '../common';
+import { timeboxesSamples, IdType, TimeboxesApiType } from '../common';
 import { wait } from '../utilities';
 
 const checkAccessToken = (accessToken?: string): void => {
@@ -12,12 +7,13 @@ const checkAccessToken = (accessToken?: string): void => {
   }
 };
 
-type CreateFakeTimeboxesApiConfigType = {
+export type FakeTimeboxesApiConfigType = {
   delayInMiliseconds?: number;
 };
 
-type CreateFakeTimeboxesApiType =
-  CreateTimeboxesApiType<CreateFakeTimeboxesApiConfigType>;
+type CreateFakeTimeboxesApiType = (
+  config?: FakeTimeboxesApiConfigType
+) => TimeboxesApiType;
 
 export const createFakeTimeboxesApi: CreateFakeTimeboxesApiType = (config) => {
   const delayInMiliseconds = config?.delayInMiliseconds || 1000;

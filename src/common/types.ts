@@ -50,15 +50,6 @@ export type TimeboxesApiType = {
 
 export type RequestToolKindType = 'axios' | 'fetch';
 
-export type CreateTimeboxesAPIConfigType = {
-  requestTool?: RequestToolKindType;
-  baseUrl?: string;
-};
-
-export type CreateTimeboxesApiType<T = {}> = (
-  config?: CreateTimeboxesAPIConfigType & T
-) => TimeboxesApiType;
-
 export type UserLoginDataType = {
   email: string;
   password: string;

@@ -1,6 +1,6 @@
 import React from 'react';
 import { TimeboxCreator, LoadingSpinner, ErrorMessage, Timebox } from '..';
-import { createTimeboxesApi } from '../../api';
+import { TimeboxesApi } from '../../api';
 import {
   TimeboxType,
   TimeboxDataHandlerType,
@@ -9,7 +9,7 @@ import {
 } from '../../common';
 import './styles.scss';
 
-const timeboxesApi = createTimeboxesApi({
+const timeboxesApi = new TimeboxesApi({
   requestTool: 'axios',
   baseUrl: 'http://localhost:4001/timeboxes',
 });
