@@ -4,4 +4,6 @@ export * from './createAxiosTimeboxesApi';
 export * from './createFakeTimeboxesApi';
 export * from './createFetchAuthorizationApi';
 export * from './createFetchTimeboxesApi';
+export * from './createTimeboxesApi';
+export * from './makeRequestViaAxios';
 export * from './makeRequestViaFetch';

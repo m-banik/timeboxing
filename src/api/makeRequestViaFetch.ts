@@ -1,54 +1,13 @@
 import { TIMEBOXES_BASE_URL } from '.';
 import {
-  IdType,
+  MakeRequestType,
   TimeboxDataType,
   TimeboxType,
   UserLoginDataType,
   PartialTimeboxType,
 } from '../common';
 
-type GetRequestViaFetchParamsType = {
-  method: 'GET';
-  id?: IdType;
-  phrase?: string;
-};
-
-type PostRequestViaFetchParamsType = {
-  method: 'POST';
-  data: TimeboxDataType | TimeboxType | UserLoginDataType;
-};
-
-type PutRequestViaFetchParamsType = {
-  method: 'PUT';
-  data: TimeboxType;
-};
-
-type PatchRequestViaFetchParamsType = {
-  method: 'PATCH';
-  data: PartialTimeboxType;
-};
-
-type DeleteRequestViaFetchParamsType = {
-  method: 'DELETE';
-  id: IdType;
-};
-
-type RequestViaFetchParamsType = {
-  baseUrl?: string;
-  accessToken?: string;
-} & (
-  | GetRequestViaFetchParamsType
-  | PostRequestViaFetchParamsType
-  | PutRequestViaFetchParamsType
-  | PatchRequestViaFetchParamsType
-  | DeleteRequestViaFetchParamsType
-);
-
-type MakeRequestViaFetchType = (
-  params: RequestViaFetchParamsType
-) => Promise<unknown>;
-
-export const makeRequestViaFetch: MakeRequestViaFetchType = async (params) => {
+export const makeRequestViaFetch: MakeRequestType = async (params) => {
   let url = params.baseUrl || TIMEBOXES_BASE_URL;
 
   const headers: HeadersInit = {

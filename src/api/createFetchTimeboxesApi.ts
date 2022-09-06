@@ -5,7 +5,7 @@ import { asssertIsOfTimeboxType, asssertAreOfTimeboxType } from '../utilities';
 export const createFetchTimeboxesApi: CreateTimeboxesApiType = (config) => {
   const baseUrl = config?.baseUrl;
 
-  const TimeboxesApi: TimeboxesApiType = {
+  const timeboxesApi: TimeboxesApiType = {
     getTimebox: async (timeboxId, accessToken) =>
       makeRequestViaFetch({
         baseUrl,
@@ -99,5 +99,5 @@ export const createFetchTimeboxesApi: CreateTimeboxesApiType = (config) => {
       }),
   };
 
-  return TimeboxesApi;
+  return timeboxesApi;
 };

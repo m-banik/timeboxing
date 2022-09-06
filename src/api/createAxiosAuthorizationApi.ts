@@ -8,7 +8,7 @@ export const createAxiosAuthorizationApi: CreateAuthorizationApiType = (
 ) => {
   const baseUrl = config?.baseUrl || LOGIN_BASE_URL;
 
-  const AuthorizationApi: AuthorizationApiType = {
+  const authorizationApi: AuthorizationApiType = {
     login: async (userLoginData) =>
       axios.post(baseUrl, userLoginData).then(({ data }) => {
         assertIsOfAccessTokenResponseType(data);
@@ -16,5 +16,5 @@ export const createAxiosAuthorizationApi: CreateAuthorizationApiType = (
       }),
   };
 
-  return AuthorizationApi;
+  return authorizationApi;
 };

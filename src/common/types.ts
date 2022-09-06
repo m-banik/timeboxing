@@ -48,6 +48,45 @@ export type TimeboxesApiType = {
   ) => Promise<unknown>;
 };
 
+export type RequestToolKindType = 'axios' | 'fetch';
+
+export type ReplaceableTimeboxesApiType = {
+  getTimebox: (
+    requestToolKind: RequestToolKindType,
+    timeboxId: IdType,
+    accessToken?: string
+  ) => Promise<TimeboxType>;
+  getTimeboxes: (
+    requestToolKind: RequestToolKindType,
+    accessToken?: string
+  ) => Promise<TimeboxType[]>;
+  getTimeboxesByFullTextSearch: (
+    requestToolKind: RequestToolKindType,
+    searchQuery: string,
+    accessToken?: string
+  ) => Promise<TimeboxType[]>;
+  addTimebox: (
+    requestToolKind: RequestToolKindType,
+    addedTimeboxData: TimeboxDataType,
+    accessToken?: string
+  ) => Promise<TimeboxType>;
+  editTimebox: (
+    requestToolKind: RequestToolKindType,
+    editedTimebox: TimeboxType,
+    accessToken?: string
+  ) => Promise<TimeboxType>;
+  partiallyUpdateTimebox: (
+    requestToolKind: RequestToolKindType,
+    partiallyUpdatedTimebox: PartialTimeboxType,
+    accessToken?: string
+  ) => Promise<TimeboxType>;
+  removeTimebox: (
+    requestToolKind: RequestToolKindType,
+    removedTimeboxId: IdType,
+    accessToken?: string
+  ) => Promise<unknown>;
+};
+
 export type CreateTimeboxesAPIConfigType = {
   baseUrl?: string;
 };
@@ -55,6 +94,10 @@ export type CreateTimeboxesAPIConfigType = {
 export type CreateTimeboxesApiType<T = {}> = (
   config?: CreateTimeboxesAPIConfigType & T
 ) => TimeboxesApiType;
+
+export type CreateReplaceableTimeboxesApiType<T = {}> = (
+  config?: CreateTimeboxesAPIConfigType & T
+) => ReplaceableTimeboxesApiType;
 
 export type UserLoginDataType = {
   email: string;
@@ -83,3 +126,42 @@ export type JwtDecodedDataType = {
   iat: number;
   sub: string;
 };
+
+export type GetRequestParamsType = {
+  method: 'GET';
+  id?: IdType;
+  phrase?: string;
+};
+
+export type PostRequestParamsType = {
+  method: 'POST';
+  data: TimeboxDataType | TimeboxType | UserLoginDataType;
+};
+
+export type PutRequestParamsType = {
+  method: 'PUT';
+  data: TimeboxType;
+};
+
+export type PatchRequestParamsType = {
+  method: 'PATCH';
+  data: PartialTimeboxType;
+};
+
+export type DeleteRequestParamsType = {
+  method: 'DELETE';
+  id: IdType;
+};
+
+export type RequestParamsType = {
+  baseUrl?: string;
+  accessToken?: string;
+} & (
+  | GetRequestParamsType
+  | PostRequestParamsType
+  | PutRequestParamsType
+  | PatchRequestParamsType
+  | DeleteRequestParamsType
+);
+
+export type MakeRequestType = (params: RequestParamsType) => Promise<unknown>;

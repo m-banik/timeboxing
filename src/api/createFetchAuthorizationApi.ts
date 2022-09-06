@@ -8,7 +8,7 @@ export const createFetchAuthorizationApi: CreateAuthorizationApiType = (
 ) => {
   const baseUrl = config?.baseUrl || LOGIN_BASE_URL;
 
-  const AuthorizationApi: AuthorizationApiType = {
+  const authorizationApi: AuthorizationApiType = {
     login: async (userLoginData) =>
       makeRequestViaFetch({
         baseUrl,
@@ -20,5 +20,5 @@ export const createFetchAuthorizationApi: CreateAuthorizationApiType = (
       }),
   };
 
-  return AuthorizationApi;
+  return authorizationApi;
 };

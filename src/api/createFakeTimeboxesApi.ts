@@ -26,7 +26,7 @@ export const createFakeTimeboxesApi: CreateFakeTimeboxesApiType = (config) => {
   const getTimeboxIndexById = (searchedId: IdType) =>
     timeboxes.findIndex(({ id }) => searchedId === id);
 
-  const FakeTimeboxesApi: TimeboxesApiType = {
+  const timeboxesApi: TimeboxesApiType = {
     getTimebox: async (timeboxId, accessToken) => {
       await wait(delayInMiliseconds);
       checkAccessToken(accessToken);
@@ -127,5 +127,5 @@ export const createFakeTimeboxesApi: CreateFakeTimeboxesApiType = (config) => {
     },
   };
 
-  return FakeTimeboxesApi;
+  return timeboxesApi;
 };
