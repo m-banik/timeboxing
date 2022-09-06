@@ -1,69 +1,110 @@
-import { createAxiosTimeboxesApi, createFetchTimeboxesApi } from '.';
+import { makeRequestViaFetch, makeRequestViaAxios } from '.';
 import {
-  CreateReplaceableTimeboxesApiType,
-  ReplaceableTimeboxesApiType,
-} from '../common/index';
+  CreateTimeboxesApiType,
+  MakeRequestType,
+  TimeboxesApiType,
+} from '../common';
+import { asssertIsOfTimeboxType, asssertAreOfTimeboxType } from '../utilities';
 
-export const createTimeboxesApi: CreateReplaceableTimeboxesApiType = (
-  config
-) => {
-  const axiosTimeboxesApi = createAxiosTimeboxesApi(config);
-  const fetchTimeboxesApi = createFetchTimeboxesApi(config);
+export const createTimeboxesApi: CreateTimeboxesApiType = (config) => {
+  const baseUrl = config?.baseUrl;
 
-  const replaceableTimeboxesApi: ReplaceableTimeboxesApiType = {
-    getTimebox: async (requestToolKind, timeboxId, accessToken) =>
-      requestToolKind === 'axios'
-        ? axiosTimeboxesApi.getTimebox(timeboxId, accessToken)
-        : fetchTimeboxesApi.getTimebox(timeboxId, accessToken),
+  let makeRequest: MakeRequestType = makeRequestViaFetch;
+  if (config?.requestTool === 'axios') {
+    makeRequest = makeRequestViaAxios;
+  }
 
-    getTimeboxes: async (requestToolKind, accessToken) =>
-      requestToolKind === 'axios'
-        ? axiosTimeboxesApi.getTimeboxes(accessToken)
-        : fetchTimeboxesApi.getTimeboxes(accessToken),
+  const timeboxesApi: TimeboxesApiType = {
+    getTimebox: async (timeboxId, accessToken) =>
+      makeRequest({
+        baseUrl,
+        accessToken,
+        method: 'GET',
+        id: timeboxId,
+      }).then((result) => {
+        asssertIsOfTimeboxType(
+          result,
+          'Server provided data of an incorrect format!'
+        );
 
-    getTimeboxesByFullTextSearch: async (
-      requestToolKind,
-      searchQuery: string,
-      accessToken
-    ) => {
-      const timeboxesApi =
-        requestToolKind === 'axios' ? axiosTimeboxesApi : fetchTimeboxesApi;
+        return result;
+      }),
 
-      return timeboxesApi.getTimeboxesByFullTextSearch(
-        searchQuery,
-        accessToken
-      );
-    },
+    getTimeboxes: async (accessToken) =>
+      makeRequest({ baseUrl, accessToken, method: 'GET' }).then((result) => {
+        asssertAreOfTimeboxType(
+          result,
+          'Server provided data of an incorrect format!'
+        );
 
-    addTimebox: async (requestToolKind, addedTimeboxData, accessToken) =>
-      requestToolKind === 'axios'
-        ? axiosTimeboxesApi.addTimebox(addedTimeboxData, accessToken)
-        : fetchTimeboxesApi.addTimebox(addedTimeboxData, accessToken),
+        return result;
+      }),
 
-    editTimebox: async (requestToolKind, editedTimebox, accessToken) =>
-      requestToolKind === 'axios'
-        ? axiosTimeboxesApi.editTimebox(editedTimebox, accessToken)
-        : fetchTimeboxesApi.editTimebox(editedTimebox, accessToken),
+    getTimeboxesByFullTextSearch: async (searchQuery, accessToken) =>
+      makeRequest({
+        baseUrl,
+        accessToken,
+        method: 'GET',
+        phrase: searchQuery,
+      }).then((result) => {
+        asssertAreOfTimeboxType(
+          result,
+          'Server provided data of an incorrect format!'
+        );
 
-    partiallyUpdateTimebox: async (
-      requestToolKind,
-      partiallyUpdatedTimebox,
-      accessToken
-    ) => {
-      const timeboxesApi =
-        requestToolKind === 'axios' ? axiosTimeboxesApi : fetchTimeboxesApi;
+        return result;
+      }),
 
-      return timeboxesApi.partiallyUpdateTimebox(
-        partiallyUpdatedTimebox,
-        accessToken
-      );
-    },
+    addTimebox: async (addedTimeboxData, accessToken) =>
+      makeRequest({
+        baseUrl,
+        accessToken,
+        method: 'POST',
+        data: addedTimeboxData,
+      }).then((result) => {
+        asssertIsOfTimeboxType(
+          result,
+          'Server provided data of an incorrect format!'
+        );
+        return result;
+      }),
 
-    removeTimebox: async (requestToolKind, removedTimeboxId, accessToken) =>
-      requestToolKind === 'axios'
-        ? axiosTimeboxesApi.removeTimebox(removedTimeboxId, accessToken)
-        : fetchTimeboxesApi.removeTimebox(removedTimeboxId, accessToken),
+    editTimebox: async (editedTimebox, accessToken) =>
+      makeRequest({
+        baseUrl,
+        accessToken,
+        method: 'PUT',
+        data: editedTimebox,
+      }).then((result) => {
+        asssertIsOfTimeboxType(
+          result,
+          'Server provided data of an incorrect format!'
+        );
+        return result;
+      }),
+
+    partiallyUpdateTimebox: async (partiallyUpdatedTimebox, accessToken) =>
+      makeRequest({
+        baseUrl,
+        accessToken,
+        method: 'PATCH',
+        data: partiallyUpdatedTimebox,
+      }).then((result) => {
+        asssertIsOfTimeboxType(
+          result,
+          'Server provided data of an incorrect format!'
+        );
+        return result;
+      }),
+
+    removeTimebox: async (removedTimeboxId, accessToken) =>
+      makeRequest({
+        baseUrl,
+        accessToken,
+        method: 'DELETE',
+        id: removedTimeboxId,
+      }),
   };
 
-  return replaceableTimeboxesApi;
+  return timeboxesApi;
 };
