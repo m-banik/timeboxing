@@ -1,11 +1,12 @@
 import React from 'react';
 import { LoadingSpinner } from '..';
-import { createAxiosAuthorizationApi } from '../../api';
+import { AuthorizationApi } from '../../api';
 import { UserLoginDataType } from '../../common';
 import { AuthenticationContext } from '../../contexts';
 import './styles.scss';
 
-const authorizationApi = createAxiosAuthorizationApi({
+const authorizationApi = new AuthorizationApi({
+  requestTool: 'axios',
   baseUrl: 'http://localhost:4001/login',
 });
 

@@ -4,11 +4,10 @@ import { asssertIsOfTimeboxType, asssertAreOfTimeboxType } from '../utilities';
 
 export class TimeboxesApi extends Api implements TimeboxesApiType {
   constructor(config: ApiConfigType) {
-    super(config);
-
-    if (!config?.baseUrl) {
-      this.baseUrl = TIMEBOXES_BASE_URL;
-    }
+    super({
+      ...config,
+      baseUrl: config.baseUrl ? config.baseUrl : TIMEBOXES_BASE_URL,
+    });
   }
 
   public getTimebox: TimeboxesApiType['getTimebox'] = async (
