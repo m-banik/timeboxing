@@ -7,6 +7,7 @@ import {
   IdType,
   InputChangeEventHandlerType,
 } from '../../common';
+import { AuthenticationContext } from '../../contexts';
 import './styles.scss';
 
 const timeboxesApi = new TimeboxesApi({
@@ -14,20 +15,15 @@ const timeboxesApi = new TimeboxesApi({
   baseUrl: 'http://localhost:4001/timeboxes',
 });
 
-type TimeboxListPropsType = {
-  accessToken?: string;
-};
-
 type TimeboxListStateType = {
   isLoading: boolean;
   hasError: boolean;
   timeboxes: TimeboxType[];
 };
 
-export class TimeboxList extends React.Component<
-  TimeboxListPropsType,
-  TimeboxListStateType
-> {
+export class TimeboxList extends React.Component<{}, TimeboxListStateType> {
+  context!: React.ContextType<typeof AuthenticationContext>;
+
   state: TimeboxListStateType = {
     isLoading: true,
     hasError: false,
@@ -40,7 +36,7 @@ export class TimeboxList extends React.Component<
 
   getAllTimeboxes = () => {
     timeboxesApi
-      .getTimeboxes(this.props.accessToken)
+      .getTimeboxes(this.context.accessToken)
       .then((timeboxes) => {
         this.setState((prevState) => ({
           ...prevState,
@@ -59,7 +55,7 @@ export class TimeboxList extends React.Component<
 
   getTimeboxesByPhrase = (phrase: string) => {
     timeboxesApi
-      .getTimeboxesByFullTextSearch(phrase, this.props.accessToken)
+      .getTimeboxesByFullTextSearch(phrase, this.context.accessToken)
       .then((timeboxes) => {
         this.setState((prevState) => ({
           ...prevState,
@@ -78,7 +74,7 @@ export class TimeboxList extends React.Component<
 
   addTimebox: TimeboxDataHandlerType = (addedTimebox) => {
     timeboxesApi
-      .addTimebox(addedTimebox, this.props.accessToken)
+      .addTimebox(addedTimebox, this.context.accessToken)
       .then((newTimebox) => {
         this.setState((prevState) => ({
           ...prevState,
@@ -89,7 +85,7 @@ export class TimeboxList extends React.Component<
 
   updateTimebox = (updatedTimebox: TimeboxType) => {
     timeboxesApi
-      .partiallyUpdateTimebox(updatedTimebox, this.props.accessToken)
+      .partiallyUpdateTimebox(updatedTimebox, this.context.accessToken)
       .then((newTimeBox) => {
         this.setState((prevState) => {
           const timeboxes = prevState.timeboxes.map((timebox) =>
@@ -105,7 +101,7 @@ export class TimeboxList extends React.Component<
 
   removeTimebox = (removedTimeboxId: IdType) => {
     timeboxesApi
-      .removeTimebox(removedTimeboxId, this.props.accessToken)
+      .removeTimebox(removedTimeboxId, this.context.accessToken)
       .then(() => {
         this.setState((prevState) => ({
           ...prevState,
@@ -166,3 +162,5 @@ export class TimeboxList extends React.Component<
     );
   }
 }
+
+TimeboxList.contextType = AuthenticationContext;

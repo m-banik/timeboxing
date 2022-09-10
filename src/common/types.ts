@@ -23,28 +23,33 @@ export type InputChangeEventHandlerType = ChangeEventHandler<HTMLInputElement>;
 
 export type ButtonEventHandlerType = MouseEventHandler<HTMLButtonElement>;
 
+export type AccessTokenType = string | null;
+
 export type TimeboxesApiType = {
-  getTimebox: (timeboxId: IdType, accessToken?: string) => Promise<TimeboxType>;
-  getTimeboxes: (accessToken?: string) => Promise<TimeboxType[]>;
+  getTimebox: (
+    timeboxId: IdType,
+    accessToken?: AccessTokenType
+  ) => Promise<TimeboxType>;
+  getTimeboxes: (accessToken?: AccessTokenType) => Promise<TimeboxType[]>;
   getTimeboxesByFullTextSearch: (
     searchQuery: string,
-    accessToken?: string
+    accessToken?: AccessTokenType
   ) => Promise<TimeboxType[]>;
   addTimebox: (
     addedTimeboxData: TimeboxDataType,
-    accessToken?: string
+    accessToken?: AccessTokenType
   ) => Promise<TimeboxType>;
   editTimebox: (
     editedTimebox: TimeboxType,
-    accessToken?: string
+    accessToken?: AccessTokenType
   ) => Promise<TimeboxType>;
   partiallyUpdateTimebox: (
     partiallyUpdatedTimebox: PartialTimeboxType,
-    accessToken?: string
+    accessToken?: AccessTokenType
   ) => Promise<TimeboxType>;
   removeTimebox: (
     removedTimeboxId: IdType,
-    accessToken?: string
+    accessToken?: AccessTokenType
   ) => Promise<unknown>;
 };
 
@@ -106,7 +111,7 @@ export type DeleteRequestParamsType = {
 
 export type RequestParamsType = {
   baseUrl?: string;
-  accessToken?: string;
+  accessToken?: AccessTokenType;
 } & (
   | GetRequestParamsType
   | PostRequestParamsType
@@ -116,5 +121,3 @@ export type RequestParamsType = {
 );
 
 export type MakeRequestType = (params: RequestParamsType) => Promise<unknown>;
-
-export type AccessTokenType = string | null;

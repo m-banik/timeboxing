@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig } from 'axios';
 import { TIMEBOXES_BASE_URL } from '.';
 import {
+  AccessTokenType,
   MakeRequestType,
   TimeboxDataType,
   TimeboxType,
@@ -8,7 +9,7 @@ import {
   PartialTimeboxType,
 } from '../common';
 
-const createRequestConfig = (accessToken?: string) => {
+const createRequestConfig = (accessToken?: AccessTokenType) => {
   const requestConfig: AxiosRequestConfig = {};
   if (typeof accessToken === 'string') {
     requestConfig.headers = {

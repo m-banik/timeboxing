@@ -2,6 +2,7 @@ import { Api, ApiConfigType } from '.';
 import {
   timeboxesSamples,
   TimeboxType,
+  AccessTokenType,
   IdType,
   TimeboxesApiType,
 } from '../common';
@@ -39,7 +40,7 @@ export class FakeTimeboxesApi extends Api implements TimeboxesApiType {
     this._timeboxes = timeboxes.map((timebox) => ({ ...timebox }));
   }
 
-  private checkAccessToken = (accessToken?: string): void => {
+  private checkAccessToken = (accessToken?: AccessTokenType): void => {
     if (typeof accessToken !== 'string') {
       throw new Error('Invalid token!');
     }

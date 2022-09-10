@@ -6,6 +6,7 @@ import {
   TimeboxList,
   EditableTimebox,
 } from '..';
+import { AuthenticationContext } from '../../contexts';
 import { AccessTokenController } from '../../utilities';
 import './styles.scss';
 
@@ -84,8 +85,10 @@ export class App extends React.Component<{}, AppStateType> {
             <LoginForm onLogin={this.handleLoginAttempt} />
           ) : (
             <>
-              <Header onLogout={this.handleLogout} />
-              <TimeboxList accessToken={accessToken} />
+              <AuthenticationContext.Provider value={{ accessToken }}>
+                <Header onLogout={this.handleLogout} />
+                <TimeboxList />
+              </AuthenticationContext.Provider>
               <EditableTimebox />
             </>
           )}
