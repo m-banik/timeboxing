@@ -116,3 +116,5 @@ export type RequestParamsType = {
 );
 
 export type MakeRequestType = (params: RequestParamsType) => Promise<unknown>;
+
+export type AccessTokenType = string | null;
