@@ -8,6 +8,7 @@ export * from './loading-spinner';
 export * from './login-form';
 export * from './progress-bar';
 export * from './real-time-clock';
+export * from './ref-example';
 export * from './timebox';
 export * from './timebox-creator';
 export * from './timebox-editor';
