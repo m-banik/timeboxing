@@ -85,8 +85,10 @@ export class App extends React.Component<{}, AppStateType> {
             <LoginForm onLogin={this.handleLoginAttempt} />
           ) : (
             <>
-              <AuthenticationContext.Provider value={{ accessToken }}>
-                <Header onLogout={this.handleLogout} />
+              <AuthenticationContext.Provider
+                value={{ accessToken, onLogout: this.handleLogout }}
+              >
+                <Header />
                 <TimeboxList />
               </AuthenticationContext.Provider>
               <EditableTimebox />
