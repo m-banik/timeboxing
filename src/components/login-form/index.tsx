@@ -1,46 +1,31 @@
 import React from 'react';
 import { LoadingSpinner } from '..';
 import { createAxiosAuthorizationApi } from '../../api';
-// import { createFetchAuthorizationApi } from '../../api';
 import { UserLoginDataType } from '../../common';
+import { AuthenticationContext } from '../../contexts';
 import './styles.scss';
 
 const authorizationApi = createAxiosAuthorizationApi({
   baseUrl: 'http://localhost:4001/login',
 });
 
-// const authorizationApi = createFetchAuthorizationApi({
-//   baseUrl: 'http://localhost:4001/login',
-// });
-
-type LoginFormPropsType = {
-  onLogin: (accessToken: string) => void;
-};
-
 type LoginFormStateType = {
   isLoading: boolean;
   wasThereAnInvalidLoginAttempt: boolean;
 };
 
-export class LoginForm extends React.Component<
-  LoginFormPropsType,
-  LoginFormStateType
-> {
-  constructor(props: LoginFormPropsType) {
-    super(props);
-    this.state = {
-      isLoading: false,
-      wasThereAnInvalidLoginAttempt: false,
-    };
+export class LoginForm extends React.Component<{}, LoginFormStateType> {
+  context!: React.ContextType<typeof AuthenticationContext>;
 
-    this.emailRef = React.createRef();
-    this.passwordRef = React.createRef();
-  }
+  state = {
+    isLoading: false,
+    wasThereAnInvalidLoginAttempt: false,
+  };
 
-  emailRef: React.RefObject<HTMLInputElement>;
-  passwordRef: React.RefObject<HTMLInputElement>;
+  emailRef = React.createRef<HTMLInputElement>();
+  passwordRef = React.createRef<HTMLInputElement>();
 
-  handleLoginAttempt = async (userLoginData: UserLoginDataType) => {
+  handleLoginAttempt = (userLoginData: UserLoginDataType) => {
     this.setState((prevState) => ({ ...prevState, isLoading: true }));
 
     authorizationApi
@@ -52,7 +37,7 @@ export class LoginForm extends React.Component<
           wasThereAnInvalidLoginAttempt: false,
         }));
 
-        this.props.onLogin(accessToken);
+        this.context.onLoginAttempt(accessToken);
       })
       .catch(() =>
         this.setState((prevState) => ({
@@ -100,3 +85,5 @@ export class LoginForm extends React.Component<
     );
   }
 }
+
+LoginForm.contextType = AuthenticationContext;

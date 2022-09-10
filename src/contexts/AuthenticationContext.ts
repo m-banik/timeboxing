@@ -3,9 +3,12 @@ import { AccessTokenType } from '../common';
 
 type AuthenticationContextType = {
   accessToken: AccessTokenType;
-  onLogout?: VoidFunction;
+  onLoginAttempt: (accessToken: AccessTokenType) => void;
+  onLogout: VoidFunction;
 };
 
 export const AuthenticationContext = createContext<AuthenticationContextType>({
   accessToken: null,
+  onLoginAttempt: (accessToken) => {},
+  onLogout: () => {},
 });

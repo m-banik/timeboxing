@@ -6,6 +6,7 @@ import {
   TimeboxList,
   EditableTimebox,
 } from '..';
+import { AccessTokenType } from '../../common';
 import { AuthenticationContext } from '../../contexts';
 import { AccessTokenController } from '../../utilities';
 import './styles.scss';
@@ -35,7 +36,7 @@ export class App extends React.Component<{}, AppStateType> {
     this.clearLogoutTimeout();
   }
 
-  handleLoginAttempt = (accessToken: string) => {
+  handleLoginAttempt = (accessToken: AccessTokenType) => {
     accessTokenController.accessToken = accessToken;
 
     const tokenExpirationTimestamp =
@@ -77,23 +78,26 @@ export class App extends React.Component<{}, AppStateType> {
 
   render() {
     const { accessToken } = this.state;
+    const contextValue = {
+      accessToken,
+      onLoginAttempt: this.handleLoginAttempt,
+      onLogout: this.handleLogout,
+    };
 
     return (
       <div className="App">
         <ErrorBoundary message={'Something went wrong...'}>
-          {accessToken === null ? (
-            <LoginForm onLogin={this.handleLoginAttempt} />
-          ) : (
-            <>
-              <AuthenticationContext.Provider
-                value={{ accessToken, onLogout: this.handleLogout }}
-              >
+          <AuthenticationContext.Provider value={contextValue}>
+            {accessToken === null ? (
+              <LoginForm />
+            ) : (
+              <>
                 <Header />
                 <TimeboxList />
-              </AuthenticationContext.Provider>
-              <EditableTimebox />
-            </>
-          )}
+                <EditableTimebox />
+              </>
+            )}
+          </AuthenticationContext.Provider>
         </ErrorBoundary>
       </div>
     );
