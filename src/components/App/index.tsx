@@ -1,16 +1,15 @@
 import React from 'react';
-import {
-  ErrorBoundary,
-  LoginForm,
-  Header,
-  TimeboxList,
-  EditableTimebox,
-  InspirationalQuote,
-} from '..';
+import { ErrorBoundary, LoginForm, LoadingSpinner } from '..';
 import { AccessTokenType } from '../../common';
 import { AuthenticationContext } from '../../contexts';
 import { AccessTokenController } from '../../utilities';
 import './styles.scss';
+
+const AuthenticatedApp = React.lazy(() =>
+  import('../authenticated-app').then((imported) => ({
+    default: imported.AuthenticatedApp,
+  }))
+);
 
 const accessTokenController = new AccessTokenController();
 
@@ -92,12 +91,9 @@ export class App extends React.Component<{}, AppStateType> {
             {accessToken === null ? (
               <LoginForm />
             ) : (
-              <>
-                <Header />
-                <TimeboxList />
-                <EditableTimebox />
-                <InspirationalQuote />
-              </>
+              <React.Suspense fallback={<LoadingSpinner fullWidth />}>
+                <AuthenticatedApp />
+              </React.Suspense>
             )}
           </AuthenticationContext.Provider>
         </ErrorBoundary>

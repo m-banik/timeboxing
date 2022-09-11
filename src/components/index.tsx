@@ -1,4 +1,5 @@
 export * from './App';
+export * from './authenticated-app';
 export * from './clock';
 export * from './current-timebox';
 export * from './editable-timebox';
