@@ -1,4 +1,5 @@
 import React from 'react';
+import './styles.scss';
 
 type ErrorMessagePropsType = React.PropsWithChildren<{
   hasError: boolean;
@@ -10,5 +11,15 @@ export const ErrorMessage: React.FC<ErrorMessagePropsType> = ({
   message,
   children,
 }) => {
-  return <React.Fragment>{hasError ? message : children}</React.Fragment>;
+  return (
+    <React.Fragment>
+      {hasError ? (
+        <div className="errorMessage">
+          <span>{message}</span>
+        </div>
+      ) : (
+        children
+      )}
+    </React.Fragment>
+  );
 };

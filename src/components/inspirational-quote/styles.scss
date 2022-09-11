@@ -1,0 +1,13 @@
+.inspirationalQuote {
+  padding: 2px;
+  text-align: right;
+  background-color: rgba(145, 133, 133, 0.4);
+  border-radius: 5px;
+
+  &__author {
+    &::before {
+      content: '-';
+      margin-right: 4px;
+    }
+  }
+}

@@ -5,6 +5,7 @@ import {
   Header,
   TimeboxList,
   EditableTimebox,
+  InspirationalQuote,
 } from '..';
 import { AccessTokenType } from '../../common';
 import { AuthenticationContext } from '../../contexts';
@@ -95,6 +96,7 @@ export class App extends React.Component<{}, AppStateType> {
                 <Header />
                 <TimeboxList />
                 <EditableTimebox />
+                <InspirationalQuote />
               </>
             )}
           </AuthenticationContext.Provider>

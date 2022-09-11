@@ -5,6 +5,7 @@ export * from './editable-timebox';
 export * from './error-boundary';
 export * from './error-message';
 export * from './header';
+export * from './inspirational-quote';
 export * from './loading-spinner';
 export * from './login-form';
 export * from './progress-bar';
