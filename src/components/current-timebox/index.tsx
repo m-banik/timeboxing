@@ -1,8 +1,9 @@
 import React from 'react';
 import CN from 'classnames';
-import { Clock, ProgressBar } from '..';
-import { TimeboxType, ButtonEventHandlerType } from '../../common';
-import { getMinutesAndSecondsFromDurationInSeconds } from '../../utilities';
+import { Clock } from '../clock';
+import { ProgressBar } from '../progress-bar';
+import { TimeboxType, ButtonEventHandlerType } from '../../common/types';
+import { getMinutesAndSecondsFromDurationInSeconds } from '../../utilities/getMinutesAndSecondsFromDurationInSeconds';
 import './styles.scss';
 
 type CurrentTimeboxPropsType = {

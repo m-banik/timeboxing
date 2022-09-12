@@ -1,6 +1,6 @@
 import React from 'react';
-import { AuthenticationContext } from '../../contexts';
-import { AccessTokenController } from '../../utilities';
+import { AuthenticationContext } from '../../contexts/AuthenticationContext';
+import { AccessTokenController } from '../../utilities/AccessTokenController';
 import './styles.scss';
 
 const accessTokenController = new AccessTokenController();

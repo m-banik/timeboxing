@@ -1,4 +1,4 @@
-import { wait, delayedError, isEven, slowIsEven, timeout } from '.';
+import { wait, delayedError, isEven, slowIsEven, timeout } from './promises';
 
 describe('wait', () => {
   it('returns a new handled Promise after 2000 milliseconds', async () =>

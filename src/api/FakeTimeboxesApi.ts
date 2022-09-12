@@ -1,12 +1,12 @@
-import { Api, ApiConfigType } from '.';
+import { Api, ApiConfigType } from './Api';
+import { timeboxesSamples } from '../common/samples';
 import {
-  timeboxesSamples,
   TimeboxType,
   AccessTokenType,
   IdType,
   TimeboxesApiType,
-} from '../common';
-import { wait } from '../utilities';
+} from '../common/types';
+import { wait } from '../utilities/promises';
 
 export type FakeTimeboxesApiConfigType = ApiConfigType & {
   delayInMiliseconds?: number;

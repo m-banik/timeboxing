@@ -1,5 +1,6 @@
-import { makeRequestViaAxios, makeRequestViaFetch } from '.';
-import { MakeRequestType, RequestToolKindType } from '../common';
+import { makeRequestViaAxios } from './makeRequestViaAxios';
+import { makeRequestViaFetch } from './makeRequestViaFetch';
+import { MakeRequestType, RequestToolKindType } from '../common/types';
 
 export type ApiConfigType = {
   baseUrl?: string;

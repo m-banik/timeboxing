@@ -4,7 +4,7 @@ import {
   TimeboxDataType,
   AccessTokenResponseType,
   JwtDecodedDataType,
-} from '../common';
+} from '../common/types';
 
 export function assertObjectIsOfCssVariablesPropertiesType(
   input: unknown,

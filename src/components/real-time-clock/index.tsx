@@ -1,5 +1,5 @@
 import React from 'react';
-import { Clock } from '..';
+import { Clock } from '../clock';
 
 type RealTimeClockStateType = {
   hours: number;

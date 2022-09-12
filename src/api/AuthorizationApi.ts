@@ -1,6 +1,7 @@
-import { Api, ApiConfigType, LOGIN_BASE_URL } from '.';
-import { AuthorizationApiType } from '../common';
-import { assertIsOfAccessTokenResponseType } from '../utilities';
+import { Api, ApiConfigType } from './Api';
+import { LOGIN_BASE_URL } from './baseUrls';
+import { AuthorizationApiType } from '../common/types';
+import { assertIsOfAccessTokenResponseType } from '../utilities/typeGuards';
 
 export class AuthorizationApi extends Api implements AuthorizationApiType {
   constructor(config: ApiConfigType) {

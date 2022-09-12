@@ -1,8 +1,10 @@
 import React from 'react';
-import { ErrorBoundary, LoginForm, LoadingSpinner } from '..';
-import { AccessTokenType } from '../../common';
-import { AuthenticationContext } from '../../contexts';
-import { AccessTokenController } from '../../utilities';
+import { ErrorBoundary } from '../error-boundary';
+import { LoginForm } from '../login-form';
+import { LoadingSpinner } from '../loading-spinner';
+import { AccessTokenType } from '../../common/types';
+import { AuthenticationContext } from '../../contexts/AuthenticationContext';
+import { AccessTokenController } from '../../utilities/AccessTokenController';
 import './styles.scss';
 
 const AuthenticatedApp = React.lazy(() =>

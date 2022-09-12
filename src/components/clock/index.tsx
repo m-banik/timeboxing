@@ -1,5 +1,5 @@
 import React from 'react';
-import { normalizePositiveNumberByLimit } from '../../utilities';
+import { normalizePositiveNumberByLimit } from '../../utilities/normalizePositiveNumberByLimit';
 import './styles.scss';
 
 type ClockPropsType = {

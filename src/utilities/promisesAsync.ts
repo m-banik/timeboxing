@@ -1,4 +1,4 @@
-import { wait, isEven } from '.';
+import { wait, isEven } from './promises';
 
 // Stwórz asynchroniczną funkcję slowIsEven(num, ms=1000), która robi to samo co funkcja z zadania
 // domowego w poprzedniej lekcji. Wykorzystaj do implementacji funkcje isEven oraz wait oraz słowo

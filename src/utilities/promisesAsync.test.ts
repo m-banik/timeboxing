@@ -1,4 +1,5 @@
-import { slowIsEvenByAsync, cumulateAsync, wait } from '.';
+import { slowIsEvenByAsync, cumulateAsync } from './promisesAsync';
+import { wait } from './promises';
 
 describe('slowIsEvenByAsync', () => {
   describe('rejects after 1 second', () => {

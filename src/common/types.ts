@@ -1,9 +1,6 @@
 import { ChangeEventHandler, MouseEventHandler } from 'react';
-// ToDo: Changed due to the outer API
-// import { nanoid } from 'nanoid';
 
 export type IdType = number;
-// export type IdType = ReturnType<typeof nanoid>;
 
 export type TimeboxType = {
   id: IdType;

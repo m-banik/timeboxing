@@ -1,4 +1,4 @@
-import { sleep } from '.';
+import { sleep } from './sleep';
 
 type TestSamplesType = {
   onSuccess: typeof jest.mock;

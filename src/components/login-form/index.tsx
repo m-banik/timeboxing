@@ -1,8 +1,8 @@
 import React from 'react';
-import { LoadingSpinner } from '..';
-import { AuthorizationApi } from '../../api';
-import { UserLoginDataType } from '../../common';
-import { AuthenticationContext } from '../../contexts';
+import { LoadingSpinner } from '../loading-spinner';
+import { AuthorizationApi } from '../../api/AuthorizationApi';
+import { UserLoginDataType } from '../../common/types';
+import { AuthenticationContext } from '../../contexts/AuthenticationContext';
 import './styles.scss';
 
 const authorizationApi = new AuthorizationApi({

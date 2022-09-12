@@ -1,5 +1,5 @@
 import { createContext } from 'react';
-import { AccessTokenType } from '../common';
+import { AccessTokenType } from '../common/types';
 
 type AuthenticationContextType = {
   accessToken: AccessTokenType;

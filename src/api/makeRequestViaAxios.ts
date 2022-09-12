@@ -1,5 +1,5 @@
 import axios, { AxiosRequestConfig } from 'axios';
-import { TIMEBOXES_BASE_URL } from '.';
+import { TIMEBOXES_BASE_URL } from './baseUrls';
 import {
   AccessTokenType,
   MakeRequestType,
@@ -7,7 +7,7 @@ import {
   TimeboxType,
   UserLoginDataType,
   PartialTimeboxType,
-} from '../common';
+} from '../common/types';
 
 const createRequestConfig = (accessToken?: AccessTokenType) => {
   const requestConfig: AxiosRequestConfig = {};

@@ -1,4 +1,4 @@
-import { fib } from '.';
+import { fib } from './fib';
 
 describe('fib', () => {
   describe('returns the argument when 1 is provided at most', () => {

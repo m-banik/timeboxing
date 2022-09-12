@@ -1,5 +1,6 @@
 import React from 'react';
-import { ErrorMessage, LoadingSpinner } from '..';
+import { ErrorMessage } from '../error-message';
+import { LoadingSpinner } from '../loading-spinner';
 import './styles.scss';
 
 type QuoteType = {

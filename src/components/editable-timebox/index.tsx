@@ -1,6 +1,10 @@
 import React from 'react';
-import { TimeboxEditor, CurrentTimebox } from '..';
-import { TimeboxDataType, InputChangeEventHandlerType } from '../../common';
+import { TimeboxEditor } from '../timebox-editor';
+import { CurrentTimebox } from '../current-timebox';
+import {
+  TimeboxDataType,
+  InputChangeEventHandlerType,
+} from '../../common/types';
 
 type EditableTimeboxStateType = TimeboxDataType & { isConfirmed: boolean };
 

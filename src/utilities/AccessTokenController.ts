@@ -1,6 +1,6 @@
 import decode from 'jwt-decode';
-import { checkIfIsOfJwtDecodedDataType } from '.';
-import { AccessTokenType, JwtDecodedDataType } from '../common';
+import { checkIfIsOfJwtDecodedDataType } from './typeGuards';
+import { AccessTokenType, JwtDecodedDataType } from '../common/types';
 
 export class AccessTokenController {
   private _accessToken: AccessTokenType = null;

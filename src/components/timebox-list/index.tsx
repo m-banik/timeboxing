@@ -1,13 +1,16 @@
 import React from 'react';
-import { TimeboxCreator, LoadingSpinner, ErrorMessage, Timebox } from '..';
-import { TimeboxesApi } from '../../api';
+import { TimeboxCreator } from '../timebox-creator';
+import { LoadingSpinner } from '../loading-spinner';
+import { ErrorMessage } from '../error-message';
+import { Timebox } from '../timebox';
+import { TimeboxesApi } from '../../api/TimeboxesApi';
 import {
   TimeboxType,
   TimeboxDataHandlerType,
   IdType,
   InputChangeEventHandlerType,
-} from '../../common';
-import { AuthenticationContext } from '../../contexts';
+} from '../../common/types';
+import { AuthenticationContext } from '../../contexts/AuthenticationContext';
 import './styles.scss';
 
 const timeboxesApi = new TimeboxesApi({

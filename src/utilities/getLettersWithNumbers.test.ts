@@ -1,4 +1,4 @@
-import { getLettersWithNumbers } from '.';
+import { getLettersWithNumbers } from './getLettersWithNumbers';
 
 describe('getLettersWithNumbers', () => {
   describe('returns the correct value', () => {

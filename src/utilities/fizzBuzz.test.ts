@@ -1,4 +1,4 @@
-import { fizzBuzz } from '.';
+import { fizzBuzz } from './fizzBuzz';
 
 describe('fizzBuzz', () => {
   describe('returns Fizz', () => {

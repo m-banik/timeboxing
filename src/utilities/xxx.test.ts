@@ -1,4 +1,4 @@
-import { xxx } from '.';
+import { xxx } from './xxx';
 
 describe('xxx', () => {
   describe('returns the argument', () => {

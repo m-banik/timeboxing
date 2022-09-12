@@ -1,5 +1,5 @@
 import React from 'react';
-import { TimeboxDataHandlerType } from '../../common';
+import { TimeboxDataHandlerType } from '../../common/types';
 import './styles.scss';
 
 type TimeboxCreatorPropsType = {

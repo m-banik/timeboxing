@@ -1,4 +1,4 @@
-import { TimeboxType } from '.';
+import { TimeboxType } from './types';
 
 export const timeboxesSamples: TimeboxType[] = [
   {

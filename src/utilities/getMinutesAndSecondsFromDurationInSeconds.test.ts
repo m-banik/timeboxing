@@ -1,4 +1,4 @@
-import { getMinutesAndSecondsFromDurationInSeconds } from '.';
+import { getMinutesAndSecondsFromDurationInSeconds } from './getMinutesAndSecondsFromDurationInSeconds';
 
 describe('getMinutesAndSecondsFromDurationInSeconds', () => {
   describe('for duration shorter than 1 minute', () => {

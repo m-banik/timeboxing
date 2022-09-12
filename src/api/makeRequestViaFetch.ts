@@ -1,11 +1,11 @@
-import { TIMEBOXES_BASE_URL } from '.';
+import { TIMEBOXES_BASE_URL } from './baseUrls';
 import {
   MakeRequestType,
   TimeboxDataType,
   TimeboxType,
   UserLoginDataType,
   PartialTimeboxType,
-} from '../common';
+} from '../common/types';
 
 export const makeRequestViaFetch: MakeRequestType = async (params) => {
   let url = params.baseUrl || TIMEBOXES_BASE_URL;

@@ -1,6 +1,10 @@
-import { Api, ApiConfigType, TIMEBOXES_BASE_URL } from '.';
-import { TimeboxesApiType } from '../common';
-import { asssertIsOfTimeboxType, asssertAreOfTimeboxType } from '../utilities';
+import { Api, ApiConfigType } from './Api';
+import { TIMEBOXES_BASE_URL } from './baseUrls';
+import { TimeboxesApiType } from '../common/types';
+import {
+  asssertIsOfTimeboxType,
+  asssertAreOfTimeboxType,
+} from '../utilities/typeGuards';
 
 export class TimeboxesApi extends Api implements TimeboxesApiType {
   constructor(config: ApiConfigType) {

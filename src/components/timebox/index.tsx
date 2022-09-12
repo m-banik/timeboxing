@@ -4,7 +4,7 @@ import {
   TimeboxHandlerType,
   TimeboxDataType,
   InputChangeEventHandlerType,
-} from '@Common/index';
+} from '../../common/types';
 import './styles.scss';
 
 type TimeboxPropsType = {
