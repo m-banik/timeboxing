@@ -18,14 +18,24 @@ const accessTokenController = new AccessTokenController();
 export const App: React.FC = () => {
   const [accessToken, setAccessToken] = React.useState<AccessTokenType>(null);
 
-  const logoutTimeoutIdRef = React.useRef<number | null>(null);
+  const handleLoginAttempt = React.useCallback(
+    (providedToken: AccessTokenType) => {
+      accessTokenController.accessToken = providedToken;
 
-  const clearLogoutTimeout = React.useCallback(() => {
-    if (logoutTimeoutIdRef.current !== null) {
-      window.clearTimeout(logoutTimeoutIdRef.current);
-      logoutTimeoutIdRef.current = null;
-    }
-  }, []);
+      const tokenExpirationTimestamp =
+        accessTokenController.getTokenExpirationTimestamp() || 0;
+
+      const sessionDuration =
+        tokenExpirationTimestamp * 1000 - new Date().getTime();
+
+      if (sessionDuration >= 5000) {
+        setAccessToken(providedToken);
+      } else {
+        accessTokenController.removeAccessToken();
+      }
+    },
+    []
+  );
 
   const handleLogout = React.useCallback(() => {
     if (accessToken === null) {
@@ -34,37 +44,7 @@ export const App: React.FC = () => {
 
     accessTokenController.removeAccessToken();
     setAccessToken(null);
-    clearLogoutTimeout();
-  }, [accessToken, clearLogoutTimeout]);
-
-  const setLogoutTimeout = React.useCallback(
-    (sessionDuration = 60 * 60 * 1000) => {
-      logoutTimeoutIdRef.current = window.setTimeout(
-        handleLogout,
-        sessionDuration
-      );
-    },
-    [handleLogout]
-  );
-
-  const handleLoginAttempt = React.useCallback(
-    (providedToken: AccessTokenType) => {
-      accessTokenController.accessToken = providedToken;
-
-      const tokenExpirationTimestamp =
-        accessTokenController.getTokenExpirationTimestamp() || 0;
-      const sessionDuration =
-        tokenExpirationTimestamp * 1000 - new Date().getTime();
-
-      if (sessionDuration >= 5000) {
-        setAccessToken(providedToken);
-        setLogoutTimeout(sessionDuration);
-      } else {
-        accessTokenController.removeAccessToken();
-      }
-    },
-    [setLogoutTimeout]
-  );
+  }, [accessToken]);
 
   const contextValue = React.useMemo(
     () => ({
@@ -79,12 +59,20 @@ export const App: React.FC = () => {
     const storedToken = accessTokenController.accessToken;
 
     if (storedToken !== null) {
-      handleLoginAttempt(storedToken);
+      setAccessToken(storedToken);
+    }
+  }, []);
+
+  React.useEffect(() => {
+    if (accessToken === null) {
+      return;
     }
 
-    return () => clearLogoutTimeout();
-    //eslint-disable-next-line
-  }, []);
+    const sessionDuration = 60 * 60 * 1000;
+    const logoutTimeoutId = window.setTimeout(handleLogout, sessionDuration);
+
+    return () => window.clearInterval(logoutTimeoutId);
+  }, [accessToken, handleLogout]);
 
   return (
     <div className="App">
