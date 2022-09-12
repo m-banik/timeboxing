@@ -8,48 +8,58 @@ import {
 
 type EditableTimeboxStateType = TimeboxDataType & { isConfirmed: boolean };
 
-export class EditableTimebox extends React.Component<
-  {},
-  EditableTimeboxStateType
-> {
-  state = {
-    title: 'Uczę się skrótów klawiszowych',
-    totalTimeInMinutes: 25,
-    isConfirmed: false,
-  };
+const initialState: EditableTimeboxStateType = {
+  title: 'Uczę się skrótów klawiszowych',
+  totalTimeInMinutes: 25,
+  isConfirmed: false,
+};
 
-  handleTitleChange: InputChangeEventHandlerType = (event) =>
-    this.setState({ title: event.target.value });
+export const EditableTimebox: React.FC = () => {
+  const [state, setState] = React.useState(initialState);
 
-  handleTotalTimeInMinutesChange: InputChangeEventHandlerType = (event) => {
-    const totalTimeInMinutes = Number(event.target.value);
-    if (!isNaN(totalTimeInMinutes)) {
-      this.setState({ totalTimeInMinutes });
-    }
-  };
+  const handleTitleChange = React.useCallback<InputChangeEventHandlerType>(
+    (event) =>
+      setState((prevState) => ({ ...prevState, title: event.target.value })),
+    [setState]
+  );
 
-  handleConfirmation = () =>
-    this.setState((prevState) => ({ isConfirmed: !prevState.isConfirmed }));
-
-  render() {
-    const { title, totalTimeInMinutes, isConfirmed } = this.state;
-
-    return isConfirmed ? (
-      <CurrentTimebox
-        title={title}
-        totalTimeInMinutes={totalTimeInMinutes}
-        isEditable={isConfirmed}
-        onEdit={this.handleConfirmation}
-      />
-    ) : (
-      <TimeboxEditor
-        title={title}
-        totalTimeInMinutes={totalTimeInMinutes}
-        isEditable={!isConfirmed}
-        onTitleChange={this.handleTitleChange}
-        onTotalTimeInMinutesChange={this.handleTotalTimeInMinutesChange}
-        onConfirm={this.handleConfirmation}
-      />
+  const handleTotalTimeInMinutesChange =
+    React.useCallback<InputChangeEventHandlerType>(
+      (event) => {
+        const totalTimeInMinutes = Number(event.target.value);
+        if (!isNaN(totalTimeInMinutes)) {
+          setState((prevState) => ({ ...prevState, totalTimeInMinutes }));
+        }
+      },
+      [setState]
     );
-  }
-}
+
+  const handleConfirmation = React.useCallback(
+    () =>
+      setState((prevState) => ({
+        ...prevState,
+        isConfirmed: !prevState.isConfirmed,
+      })),
+    [setState]
+  );
+
+  const { title, totalTimeInMinutes, isConfirmed } = state;
+
+  return isConfirmed ? (
+    <CurrentTimebox
+      title={title}
+      totalTimeInMinutes={totalTimeInMinutes}
+      isEditable={isConfirmed}
+      onEdit={handleConfirmation}
+    />
+  ) : (
+    <TimeboxEditor
+      title={title}
+      totalTimeInMinutes={totalTimeInMinutes}
+      isEditable={!isConfirmed}
+      onTitleChange={handleTitleChange}
+      onTotalTimeInMinutesChange={handleTotalTimeInMinutesChange}
+      onConfirm={handleConfirmation}
+    />
+  );
+};
