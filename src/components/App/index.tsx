@@ -15,91 +15,90 @@ const AuthenticatedApp = React.lazy(() =>
 
 const accessTokenController = new AccessTokenController();
 
-type AppStateType = {
-  accessToken: string | null;
-};
+export const App: React.FC = () => {
+  const [accessToken, setAccessToken] = React.useState<AccessTokenType>(null);
 
-export class App extends React.Component<{}, AppStateType> {
-  state: AppStateType = {
-    accessToken: null,
-  };
+  const logoutTimeoutIdRef = React.useRef<number | null>(null);
 
-  logoutTimeoutId: number | null = null;
-
-  componentDidMount() {
-    const accessToken = accessTokenController.accessToken;
-
-    if (accessToken !== null) {
-      this.handleLoginAttempt(accessToken);
+  const clearLogoutTimeout = React.useCallback(() => {
+    if (logoutTimeoutIdRef.current !== null) {
+      window.clearTimeout(logoutTimeoutIdRef.current);
+      logoutTimeoutIdRef.current = null;
     }
-  }
+  }, []);
 
-  componentWillUnmount() {
-    this.clearLogoutTimeout();
-  }
-
-  handleLoginAttempt = (accessToken: AccessTokenType) => {
-    accessTokenController.accessToken = accessToken;
-
-    const tokenExpirationTimestamp =
-      accessTokenController.getTokenExpirationTimestamp() || 0;
-    const sessionDuration =
-      tokenExpirationTimestamp * 1000 - new Date().getTime();
-
-    if (sessionDuration >= 5000) {
-      this.setState((prevState) => ({ ...prevState, accessToken }));
-      this.setLogoutTimeout(sessionDuration);
-    } else {
-      accessTokenController.removeAccessToken();
-    }
-  };
-
-  handleLogout = () => {
-    if (this.state.accessToken === null) {
+  const handleLogout = React.useCallback(() => {
+    if (accessToken === null) {
       return;
     }
 
     accessTokenController.removeAccessToken();
-    this.setState((prevState) => ({ ...prevState, accessToken: null }));
-    this.clearLogoutTimeout();
-  };
+    setAccessToken(null);
+    clearLogoutTimeout();
+  }, [accessToken, clearLogoutTimeout]);
 
-  setLogoutTimeout = (sessionDuration = 60 * 60 * 1000) => {
-    this.logoutTimeoutId = window.setTimeout(
-      this.handleLogout,
-      sessionDuration
-    );
-  };
+  const setLogoutTimeout = React.useCallback(
+    (sessionDuration = 60 * 60 * 1000) => {
+      logoutTimeoutIdRef.current = window.setTimeout(
+        handleLogout,
+        sessionDuration
+      );
+    },
+    [handleLogout]
+  );
 
-  clearLogoutTimeout = () => {
-    if (this.logoutTimeoutId !== null) {
-      window.clearTimeout(this.logoutTimeoutId);
-      this.logoutTimeoutId = null;
-    }
-  };
+  const handleLoginAttempt = React.useCallback(
+    (providedToken: AccessTokenType) => {
+      accessTokenController.accessToken = providedToken;
 
-  render() {
-    const { accessToken } = this.state;
-    const contextValue = {
+      const tokenExpirationTimestamp =
+        accessTokenController.getTokenExpirationTimestamp() || 0;
+      const sessionDuration =
+        tokenExpirationTimestamp * 1000 - new Date().getTime();
+
+      if (sessionDuration >= 5000) {
+        setAccessToken(providedToken);
+        setLogoutTimeout(sessionDuration);
+      } else {
+        accessTokenController.removeAccessToken();
+      }
+    },
+    [setLogoutTimeout]
+  );
+
+  const contextValue = React.useMemo(
+    () => ({
       accessToken,
-      onLoginAttempt: this.handleLoginAttempt,
-      onLogout: this.handleLogout,
-    };
+      onLoginAttempt: handleLoginAttempt,
+      onLogout: handleLogout,
+    }),
+    [accessToken, handleLoginAttempt, handleLogout]
+  );
 
-    return (
-      <div className="App">
-        <ErrorBoundary message={'Something went wrong...'}>
-          <AuthenticationContext.Provider value={contextValue}>
-            {accessToken === null ? (
-              <LoginForm />
-            ) : (
-              <React.Suspense fallback={<LoadingSpinner fullWidth />}>
-                <AuthenticatedApp />
-              </React.Suspense>
-            )}
-          </AuthenticationContext.Provider>
-        </ErrorBoundary>
-      </div>
-    );
-  }
-}
+  React.useEffect(() => {
+    const storedToken = accessTokenController.accessToken;
+
+    if (storedToken !== null) {
+      handleLoginAttempt(storedToken);
+    }
+
+    return () => clearLogoutTimeout();
+    //eslint-disable-next-line
+  }, []);
+
+  return (
+    <div className="App">
+      <ErrorBoundary message={'Something went wrong...'}>
+        <AuthenticationContext.Provider value={contextValue}>
+          {accessToken === null ? (
+            <LoginForm />
+          ) : (
+            <React.Suspense fallback={<LoadingSpinner fullWidth />}>
+              <AuthenticatedApp />
+            </React.Suspense>
+          )}
+        </AuthenticationContext.Provider>
+      </ErrorBoundary>
+    </div>
+  );
+};
