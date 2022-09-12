@@ -1,4 +1,5 @@
 import React from 'react';
+import { Portal } from '../portal';
 import { AuthenticationContext } from '../../contexts/AuthenticationContext';
 import { AccessTokenController } from '../../utilities/AccessTokenController';
 import './styles.scss';
@@ -11,14 +12,16 @@ export const Header: React.FC = () => {
   return (
     <AuthenticationContext.Consumer>
       {({ onLogout }) => (
-        <div className="header">
-          {userEmail ? (
-            <p className="header__welcomeMessage">{`Witaj, ${userEmail}`}</p>
-          ) : null}
-          <button className="header__logoutButton" onClick={onLogout}>
-            Wyloguj
-          </button>
-        </div>
+        <Portal destination="before">
+          <div className="header">
+            {userEmail ? (
+              <p className="header__welcomeMessage">{`Witaj, ${userEmail}`}</p>
+            ) : null}
+            <button className="header__logoutButton" onClick={onLogout}>
+              Wyloguj
+            </button>
+          </div>
+        </Portal>
       )}
     </AuthenticationContext.Consumer>
   );

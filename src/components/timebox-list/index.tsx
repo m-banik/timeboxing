@@ -155,9 +155,11 @@ export class TimeboxList extends React.Component<{}, TimeboxListStateType> {
               />
             </label>
             {timeboxes.map((timebox) => (
-              <React.Suspense fallback={<LoadingSpinner fullWidth />}>
+              <React.Suspense
+                key={timebox.id}
+                fallback={<LoadingSpinner fullWidth />}
+              >
                 <Timebox
-                  key={timebox.id}
                   timebox={timebox}
                   onDelete={() => this.removeTimebox(timebox.id)}
                   onEdit={this.updateTimebox}
