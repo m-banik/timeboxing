@@ -2,7 +2,6 @@ import React from 'react';
 import { TimeboxCreator } from '../timebox-creator';
 import { LoadingSpinner } from '../loading-spinner';
 import { ErrorMessage } from '../error-message';
-import { Timebox } from '../timebox';
 import { TimeboxesApi } from '../../api/TimeboxesApi';
 import {
   TimeboxType,
@@ -12,6 +11,10 @@ import {
 } from '../../common/types';
 import { AuthenticationContext } from '../../contexts/AuthenticationContext';
 import './styles.scss';
+
+const Timebox = React.lazy(() =>
+  import('../timebox').then(({ Timebox }) => ({ default: Timebox }))
+);
 
 const timeboxesApi = new TimeboxesApi({
   requestTool: 'axios',
@@ -152,12 +155,14 @@ export class TimeboxList extends React.Component<{}, TimeboxListStateType> {
               />
             </label>
             {timeboxes.map((timebox) => (
-              <Timebox
-                key={timebox.id}
-                timebox={timebox}
-                onDelete={() => this.removeTimebox(timebox.id)}
-                onEdit={this.updateTimebox}
-              />
+              <React.Suspense fallback={<LoadingSpinner fullWidth />}>
+                <Timebox
+                  key={timebox.id}
+                  timebox={timebox}
+                  onDelete={() => this.removeTimebox(timebox.id)}
+                  onEdit={this.updateTimebox}
+                />
+              </React.Suspense>
             ))}
           </div>
         ) : null}
