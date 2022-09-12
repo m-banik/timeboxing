@@ -8,57 +8,41 @@ type QuoteType = {
   author: string;
 };
 
-type InspirationalQuoteStateType = {
-  quote: QuoteType | null;
-  hasError: boolean;
-};
+export const InspirationalQuote: React.FC = () => {
+  const [quote, setQuote] = React.useState<QuoteType | null>(null);
+  const [hasError, setHasError] = React.useState<boolean>(false);
 
-export class InspirationalQuote extends React.Component<
-  {},
-  InspirationalQuoteStateType
-> {
-  state = {
-    quote: null,
-    hasError: false,
-  };
-
-  componentDidMount() {
+  React.useEffect(() => {
     import('inspirational-quotes')
       .then((Quotes) => {
         const quote = Quotes.default.getQuote();
 
-        this.setState((prevState) => ({ ...prevState, quote }));
+        setQuote(quote);
       })
-      .catch(() =>
-        this.setState((prevState) => ({ ...prevState, hasError: true }))
-      );
-  }
+      .catch(() => setHasError(true));
+  }, []);
 
-  render() {
-    const { quote, hasError } = this.state;
-
-    if (hasError) {
-      return (
-        <ErrorMessage
-          hasError={hasError}
-          message={'An error occurred in the inspirational quote feature.'}
-        />
-      );
-    }
-
-    if (!quote) {
-      return <LoadingSpinner fullWidth />;
-    }
-
-    const { text, author } = quote;
-
+  if (hasError) {
     return (
-      <figure className="inspirationalQuote">
-        <blockquote>{text}</blockquote>
-        <figure className="inspirationalQuote__author">
-          <cite>{author}</cite>
-        </figure>
-      </figure>
+      <ErrorMessage
+        hasError={hasError}
+        message={'An error occurred in the inspirational quote feature.'}
+      />
     );
   }
-}
+
+  if (!quote) {
+    return <LoadingSpinner fullWidth />;
+  }
+
+  const { text, author } = quote;
+
+  return (
+    <figure className="inspirationalQuote">
+      <blockquote>{text}</blockquote>
+      <figure className="inspirationalQuote__author">
+        <cite>{author}</cite>
+      </figure>
+    </figure>
+  );
+};
