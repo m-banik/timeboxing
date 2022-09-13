@@ -21,156 +21,132 @@ const timeboxesApi = new TimeboxesApi({
   baseUrl: 'http://localhost:4001/timeboxes',
 });
 
-type TimeboxListStateType = {
-  isLoading: boolean;
-  hasError: boolean;
-  timeboxes: TimeboxType[];
-};
+export const TimeboxList = () => {
+  const [isLoading, setIsLoading] = React.useState<boolean>(true);
+  const [hasError, setHasError] = React.useState<boolean>(false);
+  const [timeboxes, setTimeboxes] = React.useState<TimeboxType[]>([]);
 
-export class TimeboxList extends React.Component<{}, TimeboxListStateType> {
-  context!: React.ContextType<typeof AuthenticationContext>;
+  const context = React.useContext(AuthenticationContext);
 
-  state: TimeboxListStateType = {
-    isLoading: true,
-    hasError: false,
-    timeboxes: [],
-  };
-
-  componentDidMount() {
-    this.getAllTimeboxes();
-  }
-
-  getAllTimeboxes = () => {
+  const getAllTimeboxes = React.useCallback(() => {
     timeboxesApi
-      .getTimeboxes(this.context.accessToken)
+      .getTimeboxes(context.accessToken)
       .then((timeboxes) => {
-        this.setState((prevState) => ({
-          ...prevState,
-          timeboxes,
-          isLoading: false,
-        }));
+        setTimeboxes(timeboxes);
+        setIsLoading(false);
       })
       .catch(() => {
-        this.setState((prevState) => ({
-          ...prevState,
-          isLoading: false,
-          hasError: true,
-        }));
+        setIsLoading(false);
+        setHasError(true);
       });
-  };
+  }, [context.accessToken]);
 
-  getTimeboxesByPhrase = (phrase: string) => {
-    timeboxesApi
-      .getTimeboxesByFullTextSearch(phrase, this.context.accessToken)
-      .then((timeboxes) => {
-        this.setState((prevState) => ({
-          ...prevState,
-          timeboxes,
-          isLoading: false,
-        }));
-      })
-      .catch(() => {
-        this.setState((prevState) => ({
-          ...prevState,
-          isLoading: false,
-          hasError: true,
-        }));
-      });
-  };
-
-  addTimebox: TimeboxDataHandlerType = (addedTimebox) => {
-    timeboxesApi
-      .addTimebox(addedTimebox, this.context.accessToken)
-      .then((newTimebox) => {
-        this.setState((prevState) => ({
-          ...prevState,
-          timeboxes: [...prevState.timeboxes, newTimebox],
-        }));
-      });
-  };
-
-  updateTimebox = (updatedTimebox: TimeboxType) => {
-    timeboxesApi
-      .partiallyUpdateTimebox(updatedTimebox, this.context.accessToken)
-      .then((newTimeBox) => {
-        this.setState((prevState) => {
-          const timeboxes = prevState.timeboxes.map((timebox) =>
-            timebox.id === newTimeBox.id ? newTimeBox : timebox
-          );
-          return { ...prevState, timeboxes };
+  const getTimeboxesByPhrase = React.useCallback(
+    (phrase: string) => {
+      timeboxesApi
+        .getTimeboxesByFullTextSearch(phrase, context.accessToken)
+        .then((timeboxes) => {
+          setTimeboxes(timeboxes);
+          setIsLoading(false);
+        })
+        .catch(() => {
+          setIsLoading(false);
+          setHasError(true);
         });
-      })
-      .catch(() => {
-        this.setState((prevState) => ({ ...prevState, hasError: true }));
-      });
-  };
+    },
+    [context.accessToken]
+  );
 
-  removeTimebox = (removedTimeboxId: IdType) => {
-    timeboxesApi
-      .removeTimebox(removedTimeboxId, this.context.accessToken)
-      .then(() => {
-        this.setState((prevState) => ({
-          ...prevState,
-          timeboxes: prevState.timeboxes.filter(
-            (timebox) => timebox.id !== removedTimeboxId
-          ),
-        }));
-      })
-      .catch(() => {
-        this.setState((prevState) => ({ ...prevState, hasError: true }));
-      });
-  };
+  const addTimebox = React.useCallback<TimeboxDataHandlerType>(
+    (addedTimebox) => {
+      timeboxesApi
+        .addTimebox(addedTimebox, context.accessToken)
+        .then((newTimebox) => {
+          setTimeboxes((timeboxes) => [...timeboxes, newTimebox]);
+        });
+    },
+    [context.accessToken]
+  );
 
-  handleSearchByPhrase: InputChangeEventHandlerType = ({ target }) => {
-    const { value } = target;
+  const updateTimebox = React.useCallback(
+    (updatedTimebox: TimeboxType) => {
+      timeboxesApi
+        .partiallyUpdateTimebox(updatedTimebox, context.accessToken)
+        .then((newTimeBox) => {
+          setTimeboxes((prevTimeboxes) =>
+            prevTimeboxes.map((timebox) =>
+              timebox.id === newTimeBox.id ? newTimeBox : timebox
+            )
+          );
+        })
+        .catch(() => setHasError(true));
+    },
+    [context.accessToken]
+  );
 
-    if (value.length < 1) {
-      this.getAllTimeboxes();
-    } else {
-      this.getTimeboxesByPhrase(value);
-    }
-  };
+  const removeTimebox = React.useCallback(
+    (removedTimeboxId: IdType) => {
+      timeboxesApi
+        .removeTimebox(removedTimeboxId, context.accessToken)
+        .then(() => {
+          setTimeboxes((prevTimeboxes) =>
+            prevTimeboxes.filter((timebox) => timebox.id !== removedTimeboxId)
+          );
+        })
+        .catch(() => setHasError(true));
+    },
+    [context.accessToken]
+  );
 
-  render() {
-    const { isLoading, hasError, timeboxes } = this.state;
+  const handleSearchByPhrase = React.useCallback<InputChangeEventHandlerType>(
+    ({ target }) => {
+      const { value } = target;
 
-    return (
-      <>
-        <TimeboxCreator onCreate={this.addTimebox} />
-        {isLoading && !hasError ? <LoadingSpinner fullWidth /> : null}
-        {!isLoading && hasError ? (
-          <ErrorMessage
-            hasError={hasError}
-            message={'An error occurred in the timebox adding feature.'}
-          />
-        ) : null}
-        {!isLoading && !hasError ? (
-          <div className="timeboxList">
-            <label className="timeboxList__searchEngine">
-              Szukaj po frazie:
-              <input
-                className="timeboxList__searchEngine__input"
-                type="text"
-                onChange={this.handleSearchByPhrase}
+      value.length < 1 ? getAllTimeboxes() : getTimeboxesByPhrase(value);
+    },
+    [getAllTimeboxes, getTimeboxesByPhrase]
+  );
+
+  React.useEffect(
+    () => getAllTimeboxes(),
+    //eslint-disable-next-line
+    []
+  );
+
+  return (
+    <>
+      <TimeboxCreator onCreate={addTimebox} />
+      {isLoading && !hasError ? <LoadingSpinner fullWidth /> : null}
+      {!isLoading && hasError ? (
+        <ErrorMessage
+          hasError={hasError}
+          message={'An error occurred in the timebox adding feature.'}
+        />
+      ) : null}
+      {!isLoading && !hasError ? (
+        <div className="timeboxList">
+          <label className="timeboxList__searchEngine">
+            Szukaj po frazie:
+            <input
+              className="timeboxList__searchEngine__input"
+              type="text"
+              onChange={handleSearchByPhrase}
+            />
+          </label>
+          {timeboxes.map((timebox) => (
+            <React.Suspense
+              key={timebox.id}
+              fallback={<LoadingSpinner fullWidth />}
+            >
+              <Timebox
+                timebox={timebox}
+                onDelete={() => removeTimebox(timebox.id)}
+                onEdit={updateTimebox}
               />
-            </label>
-            {timeboxes.map((timebox) => (
-              <React.Suspense
-                key={timebox.id}
-                fallback={<LoadingSpinner fullWidth />}
-              >
-                <Timebox
-                  timebox={timebox}
-                  onDelete={() => this.removeTimebox(timebox.id)}
-                  onEdit={this.updateTimebox}
-                />
-              </React.Suspense>
-            ))}
-          </div>
-        ) : null}
-      </>
-    );
-  }
-}
-
-TimeboxList.contextType = AuthenticationContext;
+            </React.Suspense>
+          ))}
+        </div>
+      ) : null}
+    </>
+  );
+};
