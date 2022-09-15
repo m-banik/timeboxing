@@ -13,126 +13,138 @@ type CurrentTimeboxPropsType = {
   onEdit: VoidFunction;
 };
 
-type CurrentTimeboxStateType = {
-  isRunning: boolean;
-  isPaused: boolean;
-  pausesCount: number;
-  elapsedTimeInSeconds: number;
+const initialState = {
+  isRunning: false,
+  isPaused: false,
+  pausesCount: 0,
+  elapsedTimeInSeconds: 0,
 };
 
-export class CurrentTimebox extends React.Component<
-  CurrentTimeboxPropsType,
-  CurrentTimeboxStateType
-> {
-  constructor(props: CurrentTimeboxPropsType) {
-    super(props);
-    this.state = {
-      isRunning: false,
-      isPaused: false,
-      pausesCount: 0,
-      elapsedTimeInSeconds: 0,
-    };
-  }
+type IntervalRefType = {
+  id?: number;
+  shouldBeRunning?: boolean;
+};
 
-  intervalId: number | undefined;
+export const CurrentTimebox: React.FC<CurrentTimeboxPropsType> = ({
+  title,
+  totalTimeInMinutes,
+  isEditable,
+  onEdit,
+}) => {
+  const [state, setState] = React.useState(initialState);
+  const intervalRef = React.useRef<IntervalRefType>({});
 
-  startTimer = () => {
-    if (this.intervalId) {
-      this.stopTimer();
-    }
+  const handleEdit = React.useCallback<ButtonEventHandlerType>(() => {
+    onEdit();
+    intervalRef.current.shouldBeRunning = false;
+  }, [onEdit]);
 
-    this.intervalId = window.setInterval(
-      () =>
-        this.setState((prevState) => ({
-          elapsedTimeInSeconds: prevState.elapsedTimeInSeconds + 1,
-        })),
-      1000
-    );
-  };
+  const handleStart = React.useCallback<ButtonEventHandlerType>(() => {
+    setState((prevState) => ({ ...prevState, isRunning: true }));
+    intervalRef.current.shouldBeRunning = true;
+  }, []);
 
-  stopTimer = () => window.clearInterval(this.intervalId);
-
-  handleEdit: ButtonEventHandlerType = (event) => {
-    this.props.onEdit();
-    this.stopTimer();
-  };
-
-  handleStart: ButtonEventHandlerType = (event) => {
-    this.setState({ isRunning: true });
-    this.startTimer();
-  };
-
-  handleStop: ButtonEventHandlerType = (event) => {
-    this.setState({
+  const handleStop = React.useCallback<ButtonEventHandlerType>(() => {
+    setState({
       isRunning: false,
       isPaused: false,
       pausesCount: 0,
       elapsedTimeInSeconds: 0,
     });
 
-    this.stopTimer();
-  };
+    intervalRef.current.shouldBeRunning = false;
+  }, []);
 
-  handlePause: ButtonEventHandlerType = (event) => {
-    this.setState((prevState) => {
+  const handlePause = React.useCallback<ButtonEventHandlerType>(() => {
+    setState((prevState) => {
       const isPaused = !prevState.isPaused;
       const pausesCount = prevState.pausesCount;
 
-      if (isPaused) {
-        this.stopTimer();
-      } else {
-        this.startTimer();
-      }
+      intervalRef.current.shouldBeRunning = isPaused ? false : true;
 
       return {
+        ...prevState,
         isPaused,
         pausesCount: isPaused ? pausesCount + 1 : pausesCount,
       };
     });
-  };
+  }, []);
 
-  componentWillUnmount() {
-    this.intervalId && this.stopTimer();
+  const { isRunning, isPaused, pausesCount, elapsedTimeInSeconds } = state;
+  const classNames = CN('CurrentTimebox', { inactive: !isEditable });
+  const totalTimeInSeconds = totalTimeInMinutes * 60;
+  const timeLeftInSeconds = totalTimeInSeconds - elapsedTimeInSeconds;
+  const [minutesLeft, secondsLeft] =
+    getMinutesAndSecondsFromDurationInSeconds(timeLeftInSeconds);
+  const progressInPercent = (elapsedTimeInSeconds / totalTimeInSeconds) * 100.0;
+
+  if (elapsedTimeInSeconds >= totalTimeInSeconds) {
+    intervalRef.current.shouldBeRunning = false;
   }
 
-  render() {
-    const { isRunning, isPaused, pausesCount, elapsedTimeInSeconds } =
-      this.state;
-    const { title, totalTimeInMinutes, isEditable } = this.props;
-    const classNames = CN('CurrentTimebox', { inactive: !isEditable });
-    const totalTimeInSeconds = totalTimeInMinutes * 60;
-    const timeLeftInSeconds = totalTimeInSeconds - elapsedTimeInSeconds;
-    const [minutesLeft, secondsLeft] =
-      getMinutesAndSecondsFromDurationInSeconds(timeLeftInSeconds);
-    const progressInPercent =
-      (elapsedTimeInSeconds / totalTimeInSeconds) * 100.0;
+  const stopTimer = React.useCallback(
+    () => window.clearInterval(intervalRef.current.id),
+    []
+  );
 
-    if (elapsedTimeInSeconds >= totalTimeInSeconds) {
-      this.stopTimer();
+  const startTimer = React.useCallback(() => {
+    if (intervalRef.current.id) {
+      stopTimer();
     }
 
-    return (
-      <div className={classNames}>
-        <h1>{title}</h1>
-        <Clock minutes={minutesLeft} seconds={secondsLeft} />
-        <ProgressBar
-          className={isPaused ? 'inactive' : ''}
-          percent={progressInPercent}
-        />
-        <button disabled={!isEditable} onClick={this.handleEdit}>
-          Edytuj
-        </button>
-        <button disabled={!isEditable || isRunning} onClick={this.handleStart}>
-          Start
-        </button>
-        <button disabled={!isRunning} onClick={this.handleStop}>
-          Stop
-        </button>
-        <button disabled={!isRunning} onClick={this.handlePause}>
-          {isPaused ? 'Wznów' : 'Pauzuj'}
-        </button>
-        Liczba przerw: {pausesCount}
-      </div>
+    intervalRef.current.id = window.setInterval(
+      () =>
+        setState((prevState) => ({
+          ...prevState,
+          elapsedTimeInSeconds: prevState.elapsedTimeInSeconds + 1,
+        })),
+      1000
     );
-  }
-}
+  }, [stopTimer]);
+
+  React.useEffect(() => {
+    if (
+      intervalRef.current.id === undefined &&
+      intervalRef.current.shouldBeRunning === undefined
+    ) {
+      return;
+    }
+
+    intervalRef.current.shouldBeRunning ? startTimer() : stopTimer();
+  }, [
+    intervalRef.current.id,
+    intervalRef.current.shouldBeRunning,
+    startTimer,
+    stopTimer,
+  ]);
+
+  React.useEffect(
+    () => () => stopTimer(),
+    //eslint-disable-next-line
+    []
+  );
+
+  return (
+    <div className={classNames}>
+      <h1>{title}</h1>
+      <Clock minutes={minutesLeft} seconds={secondsLeft} />
+      <ProgressBar
+        className={isPaused ? 'inactive' : ''}
+        percent={progressInPercent}
+      />
+      <button disabled={!isEditable} onClick={handleEdit}>
+        Edytuj
+      </button>
+      <button disabled={!isEditable || isRunning} onClick={handleStart}>
+        Start
+      </button>
+      <button disabled={!isRunning} onClick={handleStop}>
+        Stop
+      </button>
+      <button disabled={!isRunning} onClick={handlePause}>
+        {isPaused ? 'Wznów' : 'Pauzuj'}
+      </button>
+      Liczba przerw: {pausesCount}
+    </div>
+  );
+};
