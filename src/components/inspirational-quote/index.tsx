@@ -1,7 +1,7 @@
 import React from 'react';
 import { ErrorMessage } from '../error-message';
 import { LoadingSpinner } from '../loading-spinner';
-import './styles.scss';
+import { Quote } from '../quote';
 
 type QuoteType = {
   text: string;
@@ -31,18 +31,5 @@ export const InspirationalQuote: React.FC = () => {
     );
   }
 
-  if (!quote) {
-    return <LoadingSpinner fullWidth />;
-  }
-
-  const { text, author } = quote;
-
-  return (
-    <figure className="inspirationalQuote">
-      <blockquote>{text}</blockquote>
-      <figure className="inspirationalQuote__author">
-        <cite>{author}</cite>
-      </figure>
-    </figure>
-  );
+  return quote ? <Quote {...quote} /> : <LoadingSpinner fullWidth />;
 };
