@@ -50,54 +50,49 @@ const YellowButton = React.forwardRef<HTMLButtonElement, ButtonInterface>(
   }
 );
 
-export class RefExample extends React.Component {
-  redButtonRef = React.createRef<HTMLButtonElement>();
-  limeButtonRef = React.createRef<HTMLButtonElement>();
-  yellowButtonRef = React.createRef<HTMLButtonElement>();
+export const RefExample: React.FC = () => {
+  const redButtonRef = React.useRef<HTMLButtonElement>(null);
+  const limeButtonRef = React.useRef<HTMLButtonElement>(null);
+  const yellowButtonRef = React.useRef<HTMLButtonElement>(null);
 
-  handleRedButtonClick = () => {
-    console.log(this.redButtonRef);
-    this.limeButtonRef.current?.focus();
-  };
+  const handleRedButtonClick = React.useCallback(() => {
+    console.log(redButtonRef.current);
+    limeButtonRef.current?.focus();
+  }, []);
 
-  handleLimeButtonClick = () => {
-    console.log(this.limeButtonRef);
-    this.yellowButtonRef.current?.focus();
-  };
+  const handleLimeButtonClick = React.useCallback(() => {
+    console.log(limeButtonRef.current);
+    yellowButtonRef.current?.focus();
+  }, []);
 
-  handleYellowButtonClick = () => {
-    console.log(this.yellowButtonRef);
-    this.redButtonRef.current?.focus();
-  };
+  const handleYellowButtonClick = React.useCallback(() => {
+    console.log(yellowButtonRef.current);
+    redButtonRef.current?.focus();
+  }, []);
 
-  render() {
-    const styles: React.CSSProperties = {
+  const styles = React.useMemo<React.CSSProperties>(
+    () => ({
       display: 'flex',
       justifyContent: 'space-around',
       alignItems: 'center',
       width: '220px',
       height: '100px',
       backgroundColor: 'silver',
-    };
+    }),
+    []
+  );
 
-    return (
-      <div style={styles} className={'refExample'}>
-        <RedButton ref={this.redButtonRef} onClick={this.handleRedButtonClick}>
-          Red
-        </RedButton>
-        <LimeButton
-          ref={this.limeButtonRef}
-          onClick={this.handleLimeButtonClick}
-        >
-          Lime
-        </LimeButton>
-        <YellowButton
-          ref={this.yellowButtonRef}
-          onClick={this.handleYellowButtonClick}
-        >
-          Yellow
-        </YellowButton>
-      </div>
-    );
-  }
-}
+  return (
+    <div style={styles} className={'refExample'}>
+      <RedButton ref={redButtonRef} onClick={handleRedButtonClick}>
+        Red
+      </RedButton>
+      <LimeButton ref={limeButtonRef} onClick={handleLimeButtonClick}>
+        Lime
+      </LimeButton>
+      <YellowButton ref={yellowButtonRef} onClick={handleYellowButtonClick}>
+        Yellow
+      </YellowButton>
+    </div>
+  );
+};
