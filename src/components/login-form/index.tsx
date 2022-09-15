@@ -15,7 +15,7 @@ export const LoginForm = () => {
   const [wasThereAnInvalidLoginAttempt, setWasThereAnInvalidLoginAttempt] =
     React.useState(false);
 
-  const context = React.useContext(AuthenticationContext);
+  const { onLoginAttempt } = React.useContext(AuthenticationContext);
 
   const emailRef = React.useRef<HTMLInputElement>(null);
   const passwordRef = React.useRef<HTMLInputElement>(null);
@@ -30,14 +30,14 @@ export const LoginForm = () => {
           setIsLoading(false);
           setWasThereAnInvalidLoginAttempt(false);
 
-          context.onLoginAttempt(accessToken);
+          onLoginAttempt(accessToken);
         })
         .catch(() => {
           setIsLoading(false);
           setWasThereAnInvalidLoginAttempt(true);
         });
     },
-    [context]
+    [onLoginAttempt]
   );
 
   const handleSubmit = React.useCallback<React.EventHandler<React.FormEvent>>(

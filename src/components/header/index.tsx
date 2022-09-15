@@ -7,22 +7,20 @@ import './styles.scss';
 const accessTokenController = new AccessTokenController();
 
 export const Header: React.FC = () => {
+  const { onLogout } = React.useContext(AuthenticationContext);
+
   const userEmail = accessTokenController.getUserEmail();
 
   return (
-    <AuthenticationContext.Consumer>
-      {({ onLogout }) => (
-        <Portal destination="before">
-          <div className="header">
-            {userEmail ? (
-              <p className="header__welcomeMessage">{`Witaj, ${userEmail}`}</p>
-            ) : null}
-            <button className="header__logoutButton" onClick={onLogout}>
-              Wyloguj
-            </button>
-          </div>
-        </Portal>
-      )}
-    </AuthenticationContext.Consumer>
+    <Portal destination="before">
+      <div className="header">
+        {userEmail ? (
+          <p className="header__welcomeMessage">{`Witaj, ${userEmail}`}</p>
+        ) : null}
+        <button className="header__logoutButton" onClick={onLogout}>
+          Wyloguj
+        </button>
+      </div>
+    </Portal>
   );
 };

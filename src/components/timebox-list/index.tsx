@@ -26,11 +26,11 @@ export const TimeboxList = () => {
   const [hasError, setHasError] = React.useState<boolean>(false);
   const [timeboxes, setTimeboxes] = React.useState<TimeboxType[]>([]);
 
-  const context = React.useContext(AuthenticationContext);
+  const { accessToken } = React.useContext(AuthenticationContext);
 
   const getAllTimeboxes = React.useCallback(() => {
     timeboxesApi
-      .getTimeboxes(context.accessToken)
+      .getTimeboxes(accessToken)
       .then((timeboxes) => {
         setTimeboxes(timeboxes);
         setIsLoading(false);
@@ -39,12 +39,12 @@ export const TimeboxList = () => {
         setIsLoading(false);
         setHasError(true);
       });
-  }, [context.accessToken]);
+  }, [accessToken]);
 
   const getTimeboxesByPhrase = React.useCallback(
     (phrase: string) => {
       timeboxesApi
-        .getTimeboxesByFullTextSearch(phrase, context.accessToken)
+        .getTimeboxesByFullTextSearch(phrase, accessToken)
         .then((timeboxes) => {
           setTimeboxes(timeboxes);
           setIsLoading(false);
@@ -54,24 +54,22 @@ export const TimeboxList = () => {
           setHasError(true);
         });
     },
-    [context.accessToken]
+    [accessToken]
   );
 
   const addTimebox = React.useCallback<TimeboxDataHandlerType>(
     (addedTimebox) => {
-      timeboxesApi
-        .addTimebox(addedTimebox, context.accessToken)
-        .then((newTimebox) => {
-          setTimeboxes((timeboxes) => [...timeboxes, newTimebox]);
-        });
+      timeboxesApi.addTimebox(addedTimebox, accessToken).then((newTimebox) => {
+        setTimeboxes((timeboxes) => [...timeboxes, newTimebox]);
+      });
     },
-    [context.accessToken]
+    [accessToken]
   );
 
   const updateTimebox = React.useCallback(
     (updatedTimebox: TimeboxType) => {
       timeboxesApi
-        .partiallyUpdateTimebox(updatedTimebox, context.accessToken)
+        .partiallyUpdateTimebox(updatedTimebox, accessToken)
         .then((newTimeBox) => {
           setTimeboxes((prevTimeboxes) =>
             prevTimeboxes.map((timebox) =>
@@ -81,13 +79,13 @@ export const TimeboxList = () => {
         })
         .catch(() => setHasError(true));
     },
-    [context.accessToken]
+    [accessToken]
   );
 
   const removeTimebox = React.useCallback(
     (removedTimeboxId: IdType) => {
       timeboxesApi
-        .removeTimebox(removedTimeboxId, context.accessToken)
+        .removeTimebox(removedTimeboxId, accessToken)
         .then(() => {
           setTimeboxes((prevTimeboxes) =>
             prevTimeboxes.filter((timebox) => timebox.id !== removedTimeboxId)
@@ -95,7 +93,7 @@ export const TimeboxList = () => {
         })
         .catch(() => setHasError(true));
     },
-    [context.accessToken]
+    [accessToken]
   );
 
   const handleSearchByPhrase = React.useCallback<InputChangeEventHandlerType>(
