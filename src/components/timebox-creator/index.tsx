@@ -6,56 +6,55 @@ type TimeboxCreatorPropsType = {
   onCreate: TimeboxDataHandlerType;
 };
 
-export class TimeboxCreator extends React.Component<TimeboxCreatorPropsType> {
-  constructor(props: TimeboxCreatorPropsType) {
-    super(props);
-    this.titleRef = React.createRef();
-    this.totalTimeInMinutesRef = React.createRef();
-  }
+export const TimeboxCreator: React.FC<TimeboxCreatorPropsType> = ({
+  onCreate,
+}) => {
+  const titleRef = React.createRef<HTMLInputElement>();
+  const totalTimeInMinutesRef = React.createRef<HTMLInputElement>();
 
-  titleRef: React.RefObject<HTMLInputElement>;
-  totalTimeInMinutesRef: React.RefObject<HTMLInputElement>;
-
-  handleSubmit: React.EventHandler<React.FormEvent> = (event) => {
-    event.preventDefault();
-
-    const title = this.titleRef.current?.value;
-    const totalTimeInMinutes = Number(
-      this.totalTimeInMinutesRef.current?.value
-    );
-
-    if (title !== undefined && !isNaN(totalTimeInMinutes)) {
-      this.props.onCreate({
-        title,
-        totalTimeInMinutes,
-      });
-
-      this.resetInputs();
+  const resetInputs = React.useCallback(() => {
+    if (titleRef.current && totalTimeInMinutesRef.current) {
+      titleRef.current.value = '';
+      totalTimeInMinutesRef.current.value = '';
     }
-  };
+  }, [titleRef, totalTimeInMinutesRef]);
 
-  resetInputs = () => {
-    if (this.titleRef.current && this.totalTimeInMinutesRef.current) {
-      this.titleRef.current.value = '';
-      this.totalTimeInMinutesRef.current.value = '';
-    }
-  };
+  const handleSubmit = React.useCallback<React.EventHandler<React.FormEvent>>(
+    (event) => {
+      event.preventDefault();
 
-  render() {
-    return (
-      <form className={`TimeboxCreator`} onSubmit={this.handleSubmit}>
-        <label>
-          Co robisz?
-          <input ref={this.titleRef} type="text" />
-        </label>
-        <br />
-        <label>
-          Ile minut?
-          <input ref={this.totalTimeInMinutesRef} type="number" />
-        </label>
-        <br />
-        <button>Dodaj timebox</button>
-      </form>
-    );
-  }
-}
+      const title = titleRef.current?.value || '';
+      const totalTimeInMinutes = Number(totalTimeInMinutesRef.current?.value);
+
+      if (
+        title.length > 0 &&
+        !isNaN(totalTimeInMinutes) &&
+        totalTimeInMinutes > 0
+      ) {
+        onCreate({
+          title,
+          totalTimeInMinutes,
+        });
+
+        resetInputs();
+      }
+    },
+    [titleRef, totalTimeInMinutesRef, resetInputs, onCreate]
+  );
+
+  return (
+    <form className={`TimeboxCreator`} onSubmit={handleSubmit}>
+      <label>
+        Co robisz?
+        <input ref={titleRef} type="text" />
+      </label>
+      <br />
+      <label>
+        Ile minut?
+        <input ref={totalTimeInMinutesRef} type="number" />
+      </label>
+      <br />
+      <button>Dodaj timebox</button>
+    </form>
+  );
+};
