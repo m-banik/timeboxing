@@ -10,81 +10,69 @@ const authorizationApi = new AuthorizationApi({
   baseUrl: 'http://localhost:4001/login',
 });
 
-type LoginFormStateType = {
-  isLoading: boolean;
-  wasThereAnInvalidLoginAttempt: boolean;
+export const LoginForm = () => {
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [wasThereAnInvalidLoginAttempt, setWasThereAnInvalidLoginAttempt] =
+    React.useState(false);
+
+  const context = React.useContext(AuthenticationContext);
+
+  const emailRef = React.useRef<HTMLInputElement>(null);
+  const passwordRef = React.useRef<HTMLInputElement>(null);
+
+  const handleLoginAttempt = React.useCallback(
+    (userLoginData: UserLoginDataType) => {
+      setIsLoading(true);
+
+      authorizationApi
+        .login(userLoginData)
+        .then((accessToken) => {
+          setIsLoading(false);
+          setWasThereAnInvalidLoginAttempt(false);
+
+          context.onLoginAttempt(accessToken);
+        })
+        .catch(() => {
+          setIsLoading(false);
+          setWasThereAnInvalidLoginAttempt(true);
+        });
+    },
+    [context]
+  );
+
+  const handleSubmit = React.useCallback<React.EventHandler<React.FormEvent>>(
+    (event) => {
+      event.preventDefault();
+
+      const email = emailRef.current?.value;
+      const password = passwordRef.current?.value;
+
+      if (email !== undefined && password !== undefined) {
+        const userLoginData = { email, password };
+        handleLoginAttempt(userLoginData);
+      }
+    },
+    [handleLoginAttempt]
+  );
+
+  return isLoading ? (
+    <LoadingSpinner fullWidth />
+  ) : (
+    <form className={`loginForm`} onSubmit={handleSubmit}>
+      {wasThereAnInvalidLoginAttempt ? (
+        <p className="loginForm__errorMessage">Nieudana próba logowania!</p>
+      ) : null}
+      <label>
+        E-mail:
+        <input ref={emailRef} type="email" />
+      </label>
+      <br />
+      <label>
+        Hasło:
+        <input ref={passwordRef} type="password" />
+      </label>
+      <br />
+      <button>Zaloguj</button>
+    </form>
+  );
 };
-
-export class LoginForm extends React.Component<{}, LoginFormStateType> {
-  context!: React.ContextType<typeof AuthenticationContext>;
-
-  state = {
-    isLoading: false,
-    wasThereAnInvalidLoginAttempt: false,
-  };
-
-  emailRef = React.createRef<HTMLInputElement>();
-  passwordRef = React.createRef<HTMLInputElement>();
-
-  handleLoginAttempt = (userLoginData: UserLoginDataType) => {
-    this.setState((prevState) => ({ ...prevState, isLoading: true }));
-
-    authorizationApi
-      .login(userLoginData)
-      .then((accessToken) => {
-        this.setState((prevState) => ({
-          ...prevState,
-          isLoading: false,
-          wasThereAnInvalidLoginAttempt: false,
-        }));
-
-        this.context.onLoginAttempt(accessToken);
-      })
-      .catch(() =>
-        this.setState((prevState) => ({
-          ...prevState,
-          isLoading: false,
-          wasThereAnInvalidLoginAttempt: true,
-        }))
-      );
-  };
-
-  handleSubmit: React.EventHandler<React.FormEvent> = (event) => {
-    event.preventDefault();
-
-    const email = this.emailRef.current?.value;
-    const password = this.passwordRef.current?.value;
-
-    if (email !== undefined && password !== undefined) {
-      const userLoginData = { email, password };
-      this.handleLoginAttempt(userLoginData);
-    }
-  };
-
-  render() {
-    const { isLoading, wasThereAnInvalidLoginAttempt } = this.state;
-
-    return isLoading ? (
-      <LoadingSpinner fullWidth />
-    ) : (
-      <form className={`loginForm`} onSubmit={this.handleSubmit}>
-        {wasThereAnInvalidLoginAttempt ? (
-          <p className="loginForm__errorMessage">Nieudana próba logowania!</p>
-        ) : null}
-        <label>
-          E-mail:
-          <input ref={this.emailRef} type="email" />
-        </label>
-        <br />
-        <label>
-          Hasło:
-          <input ref={this.passwordRef} type="password" />
-        </label>
-        <br />
-        <button>Zaloguj</button>
-      </form>
-    );
-  }
-}
-
-LoginForm.contextType = AuthenticationContext;
