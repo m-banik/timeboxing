@@ -1,14 +1,19 @@
 import React from 'react';
 import { ErrorMessage } from '../error-message';
 import { LoadingSpinner } from '../loading-spinner';
-import { AlternateQuote } from '../alternate-quote';
 
 type QuoteType = {
   text: string;
   author: string;
 };
 
-export const InspirationalQuote: React.FC = () => {
+interface InspirationalQuoteInterface {
+  renderQuote: (text: string, uthor: string) => JSX.Element;
+}
+
+export const InspirationalQuote: React.FC<InspirationalQuoteInterface> = ({
+  renderQuote,
+}) => {
   const [quote, setQuote] = React.useState<QuoteType | null>(null);
   const [hasError, setHasError] = React.useState<boolean>(false);
 
@@ -31,5 +36,9 @@ export const InspirationalQuote: React.FC = () => {
     );
   }
 
-  return quote ? <AlternateQuote {...quote} /> : <LoadingSpinner fullWidth />;
+  return quote ? (
+    renderQuote(quote.text, quote.author)
+  ) : (
+    <LoadingSpinner fullWidth />
+  );
 };
