@@ -1,7 +1,7 @@
 import React from 'react';
 import { ErrorMessage } from '../error-message';
 
-type ErrorBoundaryPropsType = React.PropsWithChildren<{
+export type ErrorBoundaryPropsType = React.PropsWithChildren<{
   message: string;
 }>;
 

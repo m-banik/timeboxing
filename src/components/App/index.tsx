@@ -1,10 +1,10 @@
 import React from 'react';
-import { ErrorBoundary } from '../error-boundary';
 import { LoginForm } from '../login-form';
 import { LoadingSpinner } from '../loading-spinner';
 import { AccessTokenType } from '../../common/types';
 import { AuthenticationContext } from '../../contexts/AuthenticationContext';
 import { AccessTokenController } from '../../utilities/AccessTokenController';
+import { withErrorBoundary } from '../error-boundary/wrappers/withErrorBoundary';
 import './styles.scss';
 
 const AuthenticatedApp = React.lazy(() =>
@@ -76,17 +76,17 @@ export const App: React.FC = () => {
 
   return (
     <div className="App">
-      <ErrorBoundary message={'Something went wrong...'}>
-        <AuthenticationContext.Provider value={contextValue}>
-          {accessToken === null ? (
-            <LoginForm />
-          ) : (
-            <React.Suspense fallback={<LoadingSpinner fullWidth />}>
-              <AuthenticatedApp />
-            </React.Suspense>
-          )}
-        </AuthenticationContext.Provider>
-      </ErrorBoundary>
+      <AuthenticationContext.Provider value={contextValue}>
+        {accessToken === null ? (
+          <LoginForm />
+        ) : (
+          <React.Suspense fallback={<LoadingSpinner fullWidth />}>
+            <AuthenticatedApp />
+          </React.Suspense>
+        )}
+      </AuthenticationContext.Provider>
     </div>
   );
 };
+
+export const AppWithErrorBoundary = withErrorBoundary(App);
