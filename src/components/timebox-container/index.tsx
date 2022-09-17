@@ -13,6 +13,16 @@ import {
 import { AuthenticationContext } from '../../contexts/AuthenticationContext';
 import './styles.scss';
 
+const Timebox = React.lazy(() =>
+  import('../timebox').then(({ Timebox }) => ({ default: Timebox }))
+);
+
+// const ReadOnlyTimebox = React.lazy(() =>
+//   import('../read-only-timebox').then(({ ReadOnlyTimebox }) => ({
+//     default: ReadOnlyTimebox,
+//   }))
+// );
+
 const timeboxesApi = new TimeboxesApi({
   requestTool: 'axios',
   baseUrl: 'http://localhost:4001/timeboxes',
@@ -102,6 +112,26 @@ export const TimeboxContainer = () => {
     [getAllTimeboxes, getTimeboxesByPhrase]
   );
 
+  const renderTimeboxes = React.useCallback(() => {
+    return timeboxes.map((timebox) => (
+      <React.Suspense key={timebox.id} fallback={<LoadingSpinner fullWidth />}>
+        <Timebox
+          timebox={timebox}
+          onDelete={() => removeTimebox(timebox.id)}
+          onEdit={updateTimebox}
+        />
+      </React.Suspense>
+    ));
+  }, [timeboxes, removeTimebox, updateTimebox]);
+
+  // const renderReadOnlyTimeboxes = React.useCallback(() => {
+  //   return timeboxes.map((timebox) => (
+  //     <React.Suspense key={timebox.id} fallback={<LoadingSpinner fullWidth />}>
+  //       <ReadOnlyTimebox timebox={timebox} />
+  //     </React.Suspense>
+  //   ));
+  // }, [timeboxes]);
+
   React.useEffect(
     () => getAllTimeboxes(),
     //eslint-disable-next-line
@@ -128,11 +158,7 @@ export const TimeboxContainer = () => {
               onChange={handleSearchByPhrase}
             />
           </label>
-          <TimeboxList
-            timeboxes={timeboxes}
-            onDeleteTimebox={removeTimebox}
-            onUpdateTimebox={updateTimebox}
-          />
+          <TimeboxList renderTimeboxes={renderTimeboxes} />
         </div>
       ) : null}
     </>
