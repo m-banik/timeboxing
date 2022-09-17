@@ -3,6 +3,7 @@ import CN from 'classnames';
 import { Clock } from '../clock';
 import { ProgressBar } from '../progress-bar';
 import { TimeboxType, ButtonEventHandlerType } from '../../common/types';
+import { useTitle } from '../../hooks/useTitle';
 import { getMinutesAndSecondsFromDurationInSeconds } from '../../utilities/getMinutesAndSecondsFromDurationInSeconds';
 import './styles.scss';
 
@@ -123,6 +124,11 @@ export const CurrentTimebox: React.FC<CurrentTimeboxPropsType> = ({
     //eslint-disable-next-line
     []
   );
+
+  useTitle(state.isRunning && !state.isPaused ? 'Running...' : 'Paused', [
+    state.isRunning,
+    state.isPaused,
+  ]);
 
   return (
     <div className={classNames}>
