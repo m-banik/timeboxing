@@ -9,7 +9,7 @@ if (rootElement) {
   const root = createRoot(rootElement);
   root.render(
     <React.StrictMode>
-      <AppWithErrorBoundary message={'Something went wrong...'} />
+      <AppWithErrorBoundary />
     </React.StrictMode>
   );
 }

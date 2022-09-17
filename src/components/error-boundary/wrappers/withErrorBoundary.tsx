@@ -16,3 +16,15 @@ export const withErrorBoundary = (
   };
   return SafeComponent;
 };
+
+export const createWithErrorBoundary =
+  (UnsafeComponent: React.FC) => (message: string) => {
+    const SafeComponent: React.FC = (props) => {
+      return (
+        <ErrorBoundary message={message}>
+          <UnsafeComponent {...props} />
+        </ErrorBoundary>
+      );
+    };
+    return SafeComponent;
+  };

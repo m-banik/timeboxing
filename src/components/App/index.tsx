@@ -4,7 +4,7 @@ import { LoadingSpinner } from '../loading-spinner';
 import { AccessTokenType } from '../../common/types';
 import { AuthenticationContext } from '../../contexts/AuthenticationContext';
 import { AccessTokenController } from '../../utilities/AccessTokenController';
-import { withErrorBoundary } from '../error-boundary/wrappers/withErrorBoundary';
+import { createWithErrorBoundary } from '../error-boundary/wrappers/withErrorBoundary';
 import './styles.scss';
 
 const AuthenticatedApp = React.lazy(() =>
@@ -89,4 +89,6 @@ export const App: React.FC = () => {
   );
 };
 
-export const AppWithErrorBoundary = withErrorBoundary(App);
+export const AppWithErrorBoundary = createWithErrorBoundary(App)(
+  'Something went wrong...'
+);
