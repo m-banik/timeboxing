@@ -1,79 +1,40 @@
 import React from 'react';
-import {
-  TimeboxType,
-  TimeboxHandlerType,
-  TimeboxDataType,
-  InputChangeEventHandlerType,
-} from '../../common/types';
+import { TimeboxType, IdType } from '../../common/types';
 import './styles.scss';
 
-type TimeboxPropsType = {
+interface TimeboxInterface {
   timebox: TimeboxType;
-  onEdit: TimeboxHandlerType;
-  onDelete: VoidFunction;
-};
-
-type TimeboxStateType = TimeboxDataType;
-
-export class Timebox extends React.Component<
-  TimeboxPropsType,
-  TimeboxStateType
-> {
-  constructor(props: TimeboxPropsType) {
-    super(props);
-
-    const { timebox } = this.props;
-
-    this.state = {
-      title: timebox.title,
-      totalTimeInMinutes: timebox.totalTimeInMinutes,
-    };
-  }
-
-  handleTitleChange: InputChangeEventHandlerType = (event) => {
-    const title = event.target.value;
-    this.setState((prevState) => ({
-      ...prevState,
-      title,
-    }));
-  };
-
-  handleTotalTimeInMinutesChange: InputChangeEventHandlerType = (event) => {
-    const totalTimeInMinutes = Number(event.target.value);
-    this.setState((prevState) => ({ ...prevState, totalTimeInMinutes }));
-  };
-
-  handleEdit = () => {
-    const { timebox } = this.props;
-    const editedTimebox = { ...this.state, id: timebox.id };
-    this.props.onEdit(editedTimebox);
-  };
-
-  render() {
-    const { title, totalTimeInMinutes } = this.state;
-    const { timebox, onDelete } = this.props;
-
-    const isEditable =
-      title !== timebox.title ||
-      totalTimeInMinutes !== timebox.totalTimeInMinutes;
-
-    return (
-      <div className={'Timebox'}>
-        <h3>
-          <input value={title} type="text" onChange={this.handleTitleChange} />{' '}
-          -
-          <input
-            value={totalTimeInMinutes}
-            type="number"
-            onChange={this.handleTotalTimeInMinutesChange}
-          />
-          min.
-        </h3>
-        <button onClick={onDelete}>Usuń</button>
-        <button disabled={!isEditable} onClick={this.handleEdit}>
-          Zmień
-        </button>
-      </div>
-    );
-  }
+  onEdit: (editedTimeboxId: IdType) => void;
+  onDelete: (removedTimeboxId: IdType) => void;
 }
+
+export const Timebox: React.FC<TimeboxInterface> = ({
+  timebox,
+  onEdit,
+  onDelete,
+}) => {
+  const { title, totalTimeInMinutes } = timebox;
+
+  const onEditClick = React.useCallback(
+    () => onEdit(timebox.id),
+    [timebox.id, onEdit]
+  );
+
+  const onDeleteClick = React.useCallback(
+    () => onDelete(timebox.id),
+    [timebox.id, onDelete]
+  );
+
+  return (
+    <div className={'timebox'}>
+      <h3>
+        <span>{title}</span> - <span>{totalTimeInMinutes}</span>
+        min.
+      </h3>
+      <div>
+        <button onClick={onEditClick}>Edytuj</button>
+        <button onClick={onDeleteClick}>Usuń</button>
+      </div>
+    </div>
+  );
+};

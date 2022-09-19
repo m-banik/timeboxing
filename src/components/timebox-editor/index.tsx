@@ -1,49 +1,91 @@
 import React from 'react';
-import CN from 'classnames';
-import { TimeboxType, InputChangeEventHandlerType } from '../../common/types';
+import {
+  TimeboxType,
+  TimeboxHandlerType,
+  InputChangeEventHandlerType,
+} from '../../common/types';
 import './styles.scss';
 
 type TimeboxEditorPropsType = {
-  title: TimeboxType['title'];
-  totalTimeInMinutes: TimeboxType['totalTimeInMinutes'];
-  isEditable: boolean;
-  onTitleChange: InputChangeEventHandlerType;
-  onTotalTimeInMinutesChange: InputChangeEventHandlerType;
-  onConfirm: VoidFunction;
+  timebox: TimeboxType;
+  onCancel: VoidFunction;
+  onEdit: TimeboxHandlerType;
 };
 
 export const TimeboxEditor: React.FC<TimeboxEditorPropsType> = ({
-  title,
-  totalTimeInMinutes,
-  isEditable,
-  onTitleChange,
-  onTotalTimeInMinutesChange,
-  onConfirm,
+  timebox,
+  onCancel,
+  onEdit,
 }) => {
-  const classNames = CN('TimeboxEditor', { inactive: !isEditable });
+  const { title, totalTimeInMinutes } = timebox;
+
+  const [editedTitle, setEditedTitle] = React.useState(title);
+  const [editedTotalTimeInMinutes, setEditedTotalTimeInMinutes] =
+    React.useState(totalTimeInMinutes);
+
+  const isEditable = React.useMemo(() => {
+    const areTitlesTheSame = title === editedTitle;
+    const areTotalTimesTheSame =
+      totalTimeInMinutes === editedTotalTimeInMinutes;
+
+    return !areTitlesTheSame || !areTotalTimesTheSame;
+  }, [title, editedTitle, totalTimeInMinutes, editedTotalTimeInMinutes]);
+
+  const onTitleChange = React.useCallback<InputChangeEventHandlerType>(
+    (event) => {
+      const { value } = event.target;
+
+      setEditedTitle(value);
+    },
+    []
+  );
+
+  const onTotalTimeInMinutesChange =
+    React.useCallback<InputChangeEventHandlerType>((event) => {
+      const { value } = event.target;
+
+      const valueAsNumber = Number(value);
+
+      if (!isNaN(valueAsNumber)) {
+        setEditedTotalTimeInMinutes(valueAsNumber);
+      }
+    }, []);
+
+  const onConfirm = React.useCallback(() => {
+    const editedTimebox = {
+      id: timebox.id,
+      title: editedTitle,
+      totalTimeInMinutes: editedTotalTimeInMinutes,
+    };
+
+    onEdit(editedTimebox);
+    onCancel();
+  }, [timebox.id, editedTitle, editedTotalTimeInMinutes, onEdit, onCancel]);
+
   return (
-    <div className={classNames}>
+    <div className={'timeboxEditor'}>
       <label>
         Co robisz?
-        <input
-          disabled={!isEditable}
-          value={title}
-          type="text"
-          onChange={onTitleChange}
-        />
+        <input value={editedTitle} type="text" onChange={onTitleChange} />
       </label>
       <br />
       <label>
         Ile minut?
         <input
-          disabled={!isEditable}
-          value={totalTimeInMinutes}
+          value={editedTotalTimeInMinutes}
           type="number"
           onChange={onTotalTimeInMinutesChange}
         />
       </label>
       <br />
-      <button disabled={!isEditable} onClick={onConfirm}>
+      <button className="timeboxEditor__button" onClick={onCancel}>
+        Anuluj
+      </button>
+      <button
+        className="timeboxEditor__button"
+        disabled={!isEditable}
+        onClick={onConfirm}
+      >
         Zatwierdź
       </button>
     </div>

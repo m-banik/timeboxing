@@ -17,11 +17,11 @@ const Timebox = React.lazy(() =>
   import('../timebox').then(({ Timebox }) => ({ default: Timebox }))
 );
 
-// const ReadOnlyTimebox = React.lazy(() =>
-//   import('../read-only-timebox').then(({ ReadOnlyTimebox }) => ({
-//     default: ReadOnlyTimebox,
-//   }))
-// );
+const TimeboxEditor = React.lazy(() =>
+  import('../timebox-editor').then(({ TimeboxEditor }) => ({
+    default: TimeboxEditor,
+  }))
+);
 
 const timeboxesApi = new TimeboxesApi({
   requestTool: 'axios',
@@ -31,9 +31,22 @@ const timeboxesApi = new TimeboxesApi({
 export const TimeboxContainer = () => {
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const [hasError, setHasError] = React.useState<boolean>(false);
+  const [editedTimeboxId, setEditedTimeboxId] = React.useState<IdType | null>(
+    null
+  );
   const [timeboxes, setTimeboxes] = React.useState<TimeboxType[]>([]);
 
   const { accessToken } = React.useContext(AuthenticationContext);
+
+  const onCancelTimeboxEdition = React.useCallback(
+    () => setEditedTimeboxId(null),
+    []
+  );
+
+  const onChooseEditedTimebox = React.useCallback(
+    (timeboxId: IdType) => setEditedTimeboxId(timeboxId),
+    []
+  );
 
   const getAllTimeboxes = React.useCallback(() => {
     timeboxesApi
@@ -115,22 +128,29 @@ export const TimeboxContainer = () => {
   const renderTimeboxes = React.useCallback(() => {
     return timeboxes.map((timebox) => (
       <React.Suspense key={timebox.id} fallback={<LoadingSpinner fullWidth />}>
-        <Timebox
-          timebox={timebox}
-          onDelete={() => removeTimebox(timebox.id)}
-          onEdit={updateTimebox}
-        />
+        {editedTimeboxId === timebox.id ? (
+          <TimeboxEditor
+            timebox={timebox}
+            onCancel={onCancelTimeboxEdition}
+            onEdit={updateTimebox}
+          />
+        ) : (
+          <Timebox
+            timebox={timebox}
+            onEdit={onChooseEditedTimebox}
+            onDelete={removeTimebox}
+          />
+        )}
       </React.Suspense>
     ));
-  }, [timeboxes, removeTimebox, updateTimebox]);
-
-  // const renderReadOnlyTimeboxes = React.useCallback(() => {
-  //   return timeboxes.map((timebox) => (
-  //     <React.Suspense key={timebox.id} fallback={<LoadingSpinner fullWidth />}>
-  //       <ReadOnlyTimebox timebox={timebox} />
-  //     </React.Suspense>
-  //   ));
-  // }, [timeboxes]);
+  }, [
+    timeboxes,
+    editedTimeboxId,
+    onCancelTimeboxEdition,
+    updateTimebox,
+    onChooseEditedTimebox,
+    removeTimebox,
+  ]);
 
   React.useEffect(
     () => getAllTimeboxes(),
