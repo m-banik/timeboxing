@@ -1,13 +1,86 @@
 import React from 'react';
 import './styles.scss';
 
+const INITIAL_STATE = {
+  index: 0,
+  isCheckboxChecked: false,
+};
+
+type StateType = typeof INITIAL_STATE;
+
+const actionTypes = {
+  INCREMENT_INDEX: 'INCREMENT_INDEX',
+  DECREMENT_INDEX: 'DECREMENT_INDEX',
+  SET_INDEX: 'SET_INDEX',
+  TOGGLE_IS_CHECKBOX_CHECKED: 'TOGGLE_IS_CHECKBOX_CHECKED',
+} as const;
+
+const actions = {
+  incrementIndex: () => ({ type: actionTypes.INCREMENT_INDEX }),
+  decrementIndex: () => ({ type: actionTypes.DECREMENT_INDEX }),
+  setIndex: (index: number) => ({ type: actionTypes.SET_INDEX, index }),
+  toggleIsCheckboxChecked: (isCheckboxChecked?: boolean) => ({
+    type: actionTypes.TOGGLE_IS_CHECKBOX_CHECKED,
+    isCheckboxChecked,
+  }),
+};
+
+type ActionType = ReturnType<typeof actions[keyof typeof actions]>;
+
+const reducer: React.Reducer<StateType, ActionType> = (state, action) => {
+  switch (action.type) {
+    case 'INCREMENT_INDEX':
+      let incrementedIndex = state.index + 1;
+
+      incrementedIndex =
+        incrementedIndex < INITIAL_STATE.index
+          ? INITIAL_STATE.index
+          : incrementedIndex;
+
+      return {
+        ...state,
+        index: incrementedIndex,
+      };
+    case 'DECREMENT_INDEX':
+      let decrementedIndex = state.index - 1;
+
+      decrementedIndex =
+        decrementedIndex < INITIAL_STATE.index
+          ? INITIAL_STATE.index
+          : decrementedIndex;
+
+      return {
+        ...state,
+        index: decrementedIndex,
+      };
+    case 'SET_INDEX':
+      const newIndex =
+        action.index > INITIAL_STATE.index ? action.index : INITIAL_STATE.index;
+
+      return {
+        ...state,
+        index: newIndex,
+      };
+    case 'TOGGLE_IS_CHECKBOX_CHECKED':
+      const newState = { ...state };
+      if (typeof action.isCheckboxChecked === 'boolean') {
+        newState.isCheckboxChecked = action.isCheckboxChecked;
+      } else {
+        newState.isCheckboxChecked = !state.isCheckboxChecked;
+      }
+
+      return newState;
+    default:
+      return state;
+  }
+};
+
 type ValuesRefType = {
   [n: number]: number;
 };
 
 export const FibonacciExample: React.FC = () => {
-  const [index, setIndex] = React.useState(0);
-  const [isCheckboxChecked, setIsCheckboxChecked] = React.useState(false);
+  const [state, dispatch] = React.useReducer(reducer, INITIAL_STATE);
   const valuesRef = React.useRef<ValuesRefType>({});
 
   const countFibonacci = React.useCallback((n: number) => {
@@ -17,6 +90,10 @@ export const FibonacciExample: React.FC = () => {
 
     if (n < 3) {
       return 1;
+    }
+
+    if (1476 < n) {
+      return Infinity;
     }
 
     const values: ValuesRefType = {};
@@ -45,40 +122,53 @@ export const FibonacciExample: React.FC = () => {
 
     switch (name) {
       case 'decrease':
-        setIndex((prevN) => prevN - 1);
+        dispatch(actions.decrementIndex());
         break;
       case 'increase':
-        setIndex((prevN) => prevN + 1);
+        dispatch(actions.incrementIndex());
         break;
       case 'reset':
       default:
-        setIndex(0);
+        dispatch(actions.setIndex(0));
         break;
     }
   }, []);
 
   const handleCheckboxChange = React.useCallback<
     React.ChangeEventHandler<HTMLInputElement>
-  >(() => setIsCheckboxChecked((prevValue) => !prevValue), []);
+  >(() => dispatch(actions.toggleIsCheckboxChecked()), []);
 
-  console.log(index, valuesRef.current);
+  const handleCustomIndexChange = React.useCallback<
+    React.ChangeEventHandler<HTMLInputElement>
+  >((event) => {
+    const { value } = event.currentTarget;
+    const valueAsNumber = Number(value);
+
+    if (isNaN(valueAsNumber)) {
+      return;
+    }
+
+    dispatch(actions.setIndex(valueAsNumber));
+  }, []);
 
   React.useEffect(() => {
-    if (!isCheckboxChecked) {
+    if (!state.isCheckboxChecked) {
       return;
     }
 
     let timeoutId: number;
     const setIncrementationTimeout = () =>
       window.setTimeout(() => {
-        setIndex((prevIndex) => 1 + prevIndex);
+        dispatch(actions.incrementIndex());
         timeoutId = setIncrementationTimeout();
       }, 1000);
 
     timeoutId = setIncrementationTimeout();
 
     return () => window.clearTimeout(timeoutId);
-  }, [isCheckboxChecked]);
+  }, [state.isCheckboxChecked]);
+
+  const { index, isCheckboxChecked } = state;
 
   return (
     <div className="fibonacciExample">
@@ -115,6 +205,16 @@ export const FibonacciExample: React.FC = () => {
           type="checkbox"
           checked={isCheckboxChecked}
           onChange={handleCheckboxChange}
+        />
+      </label>
+      <label className="fibonacciExample__indexInput">
+        Count a number of the Fibonacci sequence of the given index:
+        <input
+          className="fibonacciExample__indexInput__input"
+          type="number"
+          min={0}
+          value={index === 0 ? '' : index}
+          onChange={handleCustomIndexChange}
         />
       </label>
     </div>
